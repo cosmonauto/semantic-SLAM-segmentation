@@ -14,4 +14,10 @@ list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules )
 #list  list(APPEND <list> <element> [<element> ...])
 #使用APPEND选项时，该命令将会在该list之后追加若干元素。
 #注意：在CMake中，一个list是一个由封号;分割的一组字符串。
-#使用set命令
+#使用set命令可以创建一个list。例如，set(var a b c d e)命令将会创建一个list：a;b;c;d;e；
+#而set(var "a b c d e")命令创建的只是一个字符串，或者说是只有一个项的list。
+
+#当编译一个需要使用第三方库的软件时，我们需要知道：
+#去哪儿找头文件 .h                         #对比GCC的 -I 参数
+#去哪儿找库文件 (.so/.dll/.lib/.dylib/...) #对比GCC的 -L 参数
+#
