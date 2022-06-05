@@ -27,4 +27,14 @@ find_package( OpenCV REQUIRED )
 find_package( Eigen3 REQUIRED )
 find_package( PCL 1.7 REQUIRED )
 find_package( Caffe REQUIRED )
-find_pack
+find_package( G2O REQUIRED )
+
+#添加头文件
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+find_package( Cholmod )
+include_directories( ${CHOLMOD_INCLUDE_DIR} )
+
+include_directories
