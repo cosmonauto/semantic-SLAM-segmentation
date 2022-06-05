@@ -20,4 +20,11 @@ list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules )
 #当编译一个需要使用第三方库的软件时，我们需要知道：
 #去哪儿找头文件 .h                         #对比GCC的 -I 参数
 #去哪儿找库文件 (.so/.dll/.lib/.dylib/...) #对比GCC的 -L 参数
-#
+#需要链接的库文件的名字                     #对比GCC的 -l 参数
+#这也是一个 CMAKE finder 需要返回的最基本的信息。
+
+find_package( OpenCV REQUIRED )
+find_package( Eigen3 REQUIRED )
+find_package( PCL 1.7 REQUIRED )
+find_package( Caffe REQUIRED )
+find_pack
