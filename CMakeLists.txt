@@ -37,4 +37,12 @@ add_definitions(${PCL_DEFINITIONS})
 find_package( Cholmod )
 include_directories( ${CHOLMOD_INCLUDE_DIR} )
 
-include_directories
+include_directories(${Caffe_INCLUDE_DIRS})
+add_definitions(${Caffe_DEFINITIONS})
+
+set( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib )
+
+include_directories(
+    ${PROJECT_SOURCE_DIR}/
+   
