@@ -45,4 +45,11 @@ set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib )
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/
-   
+    ${PROJECT_SOURCE_DIR}/include/
+    ${PROJECT_SOURCE_DIR}/Thirdparty/
+    ${EIGEN3_INCLUDE_DIR}
+)
+
+
+add_subdirectory( ${PROJECT_SOURCE_DIR}/src/ )
+add_subdirectory( ${PROJECT_SOURCE_DIR}/experiment/ )
