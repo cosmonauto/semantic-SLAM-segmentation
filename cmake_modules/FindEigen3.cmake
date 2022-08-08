@@ -68,4 +68,11 @@ else (EIGEN3_INCLUDE_DIR)
       PATH_SUFFIXES eigen3 eigen
     )
 
-  if(EIGEN3_INC
+  if(EIGEN3_INCLUDE_DIR)
+    _eigen3_check_version()
+  endif(EIGEN3_INCLUDE_DIR)
+
+  include(FindPackageHandleStandardArgs)
+  find_package_handle_standard_args(Eigen3 DEFAULT_MSG EIGEN3_INCLUDE_DIR EIGEN3_VERSION_OK)
+
+  mark_as_adv
