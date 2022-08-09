@@ -5,4 +5,11 @@ set( build_libs
     motion_lib
     ${PROJECT_SOURCE_DIR}/Thirdparty/orbslam_modified/lib/libORB_SLAM2.so
     ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
-    g2o_co
+    g2o_core g2o_types_slam3d g2o_solver_csparse g2o_stuff g2o_csparse_extension
+    ${BOOST_LIBRARIES}
+    ${Caffe_LIBRARIES}
+)
+
+add_executable( reading_frame reading_frame.cpp )
+target_link_libraries( reading_frame
+    ${build_libs
