@@ -12,4 +12,14 @@ set( build_libs
 
 add_executable( reading_frame reading_frame.cpp )
 target_link_libraries( reading_frame
+    ${build_libs}
+)
+
+add_executable( test_pnp test_pnp.cpp )
+target_link_libraries( test_pnp
+    ${build_libs}
+)
+
+add_executable( run_tracker run_tracker.cpp )
+target_link_libraries( run_tracker
     ${build_libs
