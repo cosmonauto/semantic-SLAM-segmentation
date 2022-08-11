@@ -35,4 +35,14 @@ target_link_libraries( match_orbfeature_tum
 #    ${build_libs}
 #)
 
-add_executable( segne
+add_executable( segnet-slam exp_mapping.cpp )
+target_link_libraries( segnet-slam
+        ${build_libs}
+)
+
+add_executable(orbcreate orbcreate.cpp)
+target_link_libraries(orbcreate
+        ${build_libs}
+        )
+
+add_executable( exp_pose_graph exp
