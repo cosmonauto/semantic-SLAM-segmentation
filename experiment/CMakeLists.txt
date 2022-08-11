@@ -22,4 +22,17 @@ target_link_libraries( test_pnp
 
 add_executable( run_tracker run_tracker.cpp )
 target_link_libraries( run_tracker
-    ${build_libs
+    ${build_libs}
+)
+
+add_executable( match_orbfeature_tum match_orbfeature_tum.cpp )
+target_link_libraries( match_orbfeature_tum
+    ${build_libs}
+)
+
+#add_executable( slam3d exp_mapping.cpp )
+#target_link_libraries( slam3d
+#    ${build_libs}
+#)
+
+add_executable( segne
