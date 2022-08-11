@@ -45,4 +45,16 @@ target_link_libraries(orbcreate
         ${build_libs}
         )
 
-add_executable( exp_pose_graph exp
+add_executable( exp_pose_graph exp_pose_graph.cpp )
+target_link_libraries( exp_pose_graph
+    ${build_libs}
+)
+
+add_executable( segnet segnet.cpp )
+target_link_libraries( segnet
+    ${build_libs}
+)
+
+set(mumuinclude
+        ../include/rgbdframe.h
+        ../include/basicS
