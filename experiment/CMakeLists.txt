@@ -64,4 +64,11 @@ set(mumuinclude
         ../include/feature.h
         ../include/mapper.h
         ../include/orb.h
-        ../include/p
+        ../include/parameter_reader.h
+        ../include/vo_stereo.hpp
+        ../include/vo.hpp
+        ../include/segnet.h
+        ../include/track.h
+        ../include/pose_graph.h
+        ../include/uvdisparity.hpp
+     
