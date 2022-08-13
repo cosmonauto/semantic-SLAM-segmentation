@@ -57,4 +57,11 @@ target_link_libraries( segnet
 
 set(mumuinclude
         ../include/rgbdframe.h
-        ../include/basicS
+        ../include/basicStructure.hpp
+        ../include/common_headers.h
+        ../include/common.h
+        ../include/converter.h
+        ../include/feature.h
+        ../include/mapper.h
+        ../include/orb.h
+        ../include/p
