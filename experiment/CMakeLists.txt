@@ -71,4 +71,6 @@ set(mumuinclude
         ../include/track.h
         ../include/pose_graph.h
         ../include/uvdisparity.hpp
-     
+        ../include/quadmatcher.hpp)
+
+add_executable( mumucpp mumu.cpp ${mumuinclude})
