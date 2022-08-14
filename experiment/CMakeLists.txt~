@@ -15,4 +15,14 @@ target_link_libraries( reading_frame
     ${build_libs}
 )
 
-add_executable( te
+add_executable( test_pnp test_pnp.cpp )
+target_link_libraries( test_pnp
+    ${build_libs}
+)
+
+add_executable( run_tracker run_tracker.cpp )
+target_link_libraries( run_tracker
+    ${build_libs}
+)
+
+add_executable( match_orbfeature_tum match_orbfeature_tum.c
