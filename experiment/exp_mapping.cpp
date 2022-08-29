@@ -18,4 +18,9 @@ using namespace rgbd_tutor;
 int main()
 {
 
-    ParameterReader	parameterReade
+    ParameterReader	parameterReader;
+    VisualOdometryStereo::parameters voparam; 
+    double f = parameterReader.getData<double>("camera.fx");
+    double c_u = parameterReader.getData<double>("camera.cx");
+    double c_v = parameterReader.getData<double>("camera.cy");
+    double base = parameterR
