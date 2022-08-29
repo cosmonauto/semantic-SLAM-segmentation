@@ -30,4 +30,11 @@ int main()
     voparam.inlier_threshold = inlier_threshold;
     Tracker::Ptr	tracker( new Tracker(parameterReader, voparam) );
     FrameReader		frameReader( parameterReader );
-    PoseGraph		poseGraph( paramet
+    PoseGraph		poseGraph( parameterReader, tracker );
+    Mapper              mapper( parameterReader, poseGraph );
+
+    while ( RGBDFrame::Ptr frame = frameReader.next() )
+    {
+        cout<<frame->id<<endl;
+        boost::timer timer;
+        cv::imsho
