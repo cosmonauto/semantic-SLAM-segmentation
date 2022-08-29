@@ -37,4 +37,10 @@ int main()
     {
         cout<<frame->id<<endl;
         boost::timer timer;
-        cv::imsho
+        cv::imshow("image", frame->rgb);
+        //cv::imshow("depth", frame->depth);
+        cv::waitKey(1);
+        tracker->updateFrame( frame );
+        poseGraph.tryInsertKeyFrame( frame );
+        
+        if (trac
