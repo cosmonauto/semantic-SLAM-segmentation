@@ -11,4 +11,9 @@ int main()
     while( RGBDFrame::Ptr frame = fr.next() )
     {
         char _filename[256];
-   
+        sprintf(_filename,"/home/relaybot/Mu_Link/KittiData/01/depth/%06d.png",i);
+        i++;
+
+        cv::imshow( "image", frame->rgb );
+	    cv::imshow( "depth", frame->depth );
+	    cv::imshow( "semantic
