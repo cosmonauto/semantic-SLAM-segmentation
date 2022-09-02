@@ -1,24 +1,15 @@
-#include "rgbdframe.h"
+
 #include "track.h"
 #include "pose_graph.h"
-#include "common_headers.h"
-#include "mapper.h"
-#include "readGTPose.h"
 #include "vo_stereo.hpp"
+#include "readGTPose.h"
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
-#include <pcl/common/common_headers.h>
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/visualization/cloud_viewer.h>
-
-using namespace std;
 using namespace rgbd_tutor;
 
 int main()
 {
-
     ParameterReader	parameterReader;
+
     VisualOdometryStereo::parameters voparam; 
     double f = parameterReader.getData<double>("camera.fx");
     double c_u = parameterReader.getData<double>("camera.cx");
@@ -28,32 +19,32 @@ int main()
     voparam.calib.f  = f;      voparam.calib.cu = c_u;
     voparam.calib.cv = c_v;    voparam.base     = base;	
     voparam.inlier_threshold = inlier_threshold;
+
     Tracker::Ptr	tracker( new Tracker(parameterReader, voparam) );
     FrameReader		frameReader( parameterReader );
     PoseGraph		poseGraph( parameterReader, tracker );
-    Mapper              mapper( parameterReader, poseGraph );
 
-    while ( RGBDFrame::Ptr frame = frameReader.next() )
+    while( RGBDFrame::Ptr frame = frameReader.next() )
     {
-        cout<<frame->id<<endl;
+        cout<<"*******************************************"<<endl;
         boost::timer timer;
-        cv::imshow("image", frame->rgb);
-        //cv::imshow("depth", frame->depth);
-        cv::waitKey(1);
-        tracker->updateFrame( frame );
-        poseGraph.tryInsertKeyFrame( frame );
-        
-        if (tracker->getState() == Tracker::LOST)
+        cout<<"loading frame "<<frame->id<<endl;
+        Eigen::Isometry3d T = tracker->updateFrame( frame );
+        cout<<"current frame T = "<<endl<<T.matrix()<<endl;
+        cv::imshow( "image", frame->rgb );
+        if ( poseGraph.tryInsertKeyFrame( frame ) == true )
         {
-            cout << "tracker is lost" << endl;
-            //break;
+            cout<<"Insert key-frame succeed"<<endl;
+            cv::waitKey(1);
         }
+        else
+        {
+            cout<<"Insert key-frame failed"<<endl;
+            cv::waitKey(1);
+        }
+        cout<<GREEN<<"time cost="<<timer.elapsed()<<RESET<<endl;
     }
- 
-    // shutdown
-    mapper.SaveMap();
-    poseGraph.shutdown();
-    mapper.shutdown();
 
+    poseGraph.shutdown();
     return 0;
 }

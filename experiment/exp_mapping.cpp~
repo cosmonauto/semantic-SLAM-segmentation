@@ -1,3 +1,4 @@
+
 #include "rgbdframe.h"
 #include "track.h"
 #include "pose_graph.h"
@@ -35,7 +36,6 @@ int main()
 
     while ( RGBDFrame::Ptr frame = frameReader.next() )
     {
-        cout<<frame->id<<endl;
         boost::timer timer;
         cv::imshow("image", frame->rgb);
         //cv::imshow("depth", frame->depth);
@@ -51,7 +51,6 @@ int main()
     }
  
     // shutdown
-    mapper.SaveMap();
     poseGraph.shutdown();
     mapper.shutdown();
 
