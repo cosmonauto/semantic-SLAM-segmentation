@@ -16,4 +16,12 @@ int main()
 
         cv::imshow( "image", frame->rgb );
 	    cv::imshow( "depth", frame->depth );
-	    cv::imshow( "semantic
+	    cv::imshow( "semantic", frame->semantic );
+
+        cv::imwrite(_filename,frame->depth);
+
+	    cv::waitKey(1);
+    }
+
+    return 0;
+}
