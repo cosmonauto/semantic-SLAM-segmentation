@@ -14,4 +14,8 @@ int main()
     FrameReader frameReader( para );
 
     VisualOdometryStereo::parameters voparam; 
- 
+    double f = para.getData<double>("camera.fx");
+    double c_u = para.getData<double>("camera.cx");
+    double c_v = para.getData<double>("camera.cy");
+    double base = para.getData<double>("camera.baseline");
+    dou
