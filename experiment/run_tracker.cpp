@@ -18,4 +18,7 @@ int main()
     double c_u = para.getData<double>("camera.cx");
     double c_v = para.getData<double>("camera.cy");
     double base = para.getData<double>("camera.baseline");
-    dou
+    double inlier_threshold = para.getData<double>("inlier_threshold");
+    voparam.calib.f  = f;      voparam.calib.cu = c_u;
+    voparam.calib.cv = c_v;    voparam.base     = base;	
+    voparam.inlier_threshold = inlier
