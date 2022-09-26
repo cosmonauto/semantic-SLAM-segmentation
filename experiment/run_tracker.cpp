@@ -21,4 +21,9 @@ int main()
     double inlier_threshold = para.getData<double>("inlier_threshold");
     voparam.calib.f  = f;      voparam.calib.cu = c_u;
     voparam.calib.cv = c_v;    voparam.base     = base;	
-    voparam.inlier_threshold = inlier
+    voparam.inlier_threshold = inlier_threshold;
+    Tracker tracker(para, voparam);
+    // plot
+    string pose_file = para.getData<string>("gtpose_source");
+    PoseReader poseReader(pose_file);
+    cv::Mat poseMap(1500,1500,CV_8UC3,cv::Scalar(
