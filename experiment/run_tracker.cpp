@@ -60,4 +60,8 @@ int main()
 	cv::circle(poseMap, cv::Point(poseMap.cols/2+gtpose.ptr<double>(0)[3], poseMap.rows/2-gtpose.ptr<double>(2)[3]), 2, cv::Scalar(0,0,255));  
 	cv::namedWindow("pose", 0);
 	cv::imshow("pose", poseMap);
-	cv::waitKey
+	cv::waitKey(1);
+
+    }
+    return 0;
+}
