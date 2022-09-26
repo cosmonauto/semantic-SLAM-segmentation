@@ -36,4 +36,13 @@ int main()
         Eigen::Isometry3d T = tracker.updateFrame( frame );
         cout<<BOLDBLUE"current T="<<endl<<T.matrix()<<RESET<<endl;
         cv::imshow( "image", frame->rgb );
-        if (tracker.getState() == Tracker:
+        if (tracker.getState() == Tracker::LOST)
+        {
+            cout<<"The tracker has lost"<<endl;
+            cv::waitKey(0);
+        }
+        else
+        {
+            cv::waitKey(1);
+        }
+        cout<<"time cost = "<<timer.elapsed()<<endl
