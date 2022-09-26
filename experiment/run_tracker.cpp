@@ -45,4 +45,15 @@ int main()
         {
             cv::waitKey(1);
         }
-        cout<<"time cost = "<<timer.elapsed()<<endl
+        cout<<"time cost = "<<timer.elapsed()<<endl;
+
+	int x = T(0,3);
+	int y = T(2,3);
+	cout << "x: " << x << " y: " << y << endl;
+
+	// gt_pose
+	n += 1;
+	cv::Mat gtpose;
+	poseReader.getData(n+1, gtpose);
+
+	cv::circle(poseMap, cv::Point(poseMap.cols/2+x, poseMap.rows/2-y), 2, cv:
