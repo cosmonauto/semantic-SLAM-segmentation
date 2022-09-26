@@ -33,4 +33,7 @@ int main()
         cout<<"*************************************"<<endl;
         cout<<"tracking frame "<<frame->id<<endl;
         boost::timer    timer;
-        Eig
+        Eigen::Isometry3d T = tracker.updateFrame( frame );
+        cout<<BOLDBLUE"current T="<<endl<<T.matrix()<<RESET<<endl;
+        cv::imshow( "image", frame->rgb );
+        if (tracker.getState() == Tracker:
