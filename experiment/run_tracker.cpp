@@ -26,4 +26,11 @@ int main()
     // plot
     string pose_file = para.getData<string>("gtpose_source");
     PoseReader poseReader(pose_file);
-    cv::Mat poseMap(1500,1500,CV_8UC3,cv::Scalar(
+    cv::Mat poseMap(1500,1500,CV_8UC3,cv::Scalar(0,0,0));
+    int n = 0;
+    while ( RGBDFrame::Ptr frame = frameReader.next() )
+    {
+        cout<<"*************************************"<<endl;
+        cout<<"tracking frame "<<frame->id<<endl;
+        boost::timer    timer;
+        Eig
