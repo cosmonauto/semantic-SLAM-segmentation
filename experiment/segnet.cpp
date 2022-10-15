@@ -69,4 +69,11 @@ int main(int argc, char** argv)
          * 所以下面的代码通过Label 的if判断去改变second(idx)实际上没有改变其因素
          */
 
-        string Predictions_name[360][480
+        string Predictions_name[360][480];
+        string Predictions_num[360][480];
+        for(int i_1=0;i_1<360;i_1++)
+        {
+            for(int j_1=0;j_1<480;j_1++)
+            {
+                Predictions_name[i_1][j_1]=predictions[i_1*480+j_1].first;
+ 
