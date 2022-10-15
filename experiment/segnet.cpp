@@ -45,4 +45,14 @@ int main(int argc, char** argv)
 //【3】CV_8UC4--则可以创建-----8位无符号的四通道---带透明色的RGB图像
 //#define CV_8UC4 CV_MAKETYPE(CV_8U,4)
 
-        if(frame.size().width
+        if(frame.size().width<=0)continue;
+
+        cv::Mat copy_frame = frame.clone();
+
+        // time
+        clock_t starttime=clock();
+
+        // Prediction
+        cv::imshow("frame", frame);
+        cv::Mat segnet_frame ;
+      
