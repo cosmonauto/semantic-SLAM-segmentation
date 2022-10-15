@@ -64,4 +64,9 @@ int main(int argc, char** argv)
         /* 在Caffe-Segnet的函数中，主要是Predict此部分代码
          * std::vector<float> output = Predict(img);
          * 输出的容器vector大小为宽*高，代表每个像素点的分类结果输出
-     
+         * 而predictions.push_back(std::make_pair(labels_[idx], idx));
+         * 上述代码其实并没有将Label与输出的结果idx关联起来，输出还是按照0-11排序
+         * 所以下面的代码通过Label 的if判断去改变second(idx)实际上没有改变其因素
+         */
+
+        string Predictions_name[360][480
