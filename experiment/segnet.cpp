@@ -39,4 +39,10 @@ int main(int argc, char** argv)
 
 //【1】CV_8UC1---则可以创建----8位无符号的单通道---灰度图片------grayImg
 //#define CV_8UC1 CV_MAKETYPE(CV_8U,1)
-//#define CV_8UC2 CV_
+//#define CV_8UC2 CV_MAKETYPE(CV_8U,2)
+//【2】CV_8UC3---则可以创建----8位无符号的三通道---RGB彩色图像---colorImg
+//#define CV_8UC3 CV_MAKETYPE(CV_8U,3)
+//【3】CV_8UC4--则可以创建-----8位无符号的四通道---带透明色的RGB图像
+//#define CV_8UC4 CV_MAKETYPE(CV_8U,4)
+
+        if(frame.size().width
