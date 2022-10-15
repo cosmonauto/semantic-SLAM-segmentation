@@ -31,4 +31,12 @@ int main(int argc, char** argv)
 #elif (datasetvalue==1)
         sprintf(file_name, "../Image_Test/mu/rgb/%04d.jpg",i);
 #else
-        cout<<"没有定义数据集"<<end
+        cout<<"没有定义数据集"<<endl;
+#endif
+
+        cv::Mat frame = cv::imread(file_name, 1);
+        //cv::resize(frame, frame, cv::Size(960,720));
+
+//【1】CV_8UC1---则可以创建----8位无符号的单通道---灰度图片------grayImg
+//#define CV_8UC1 CV_MAKETYPE(CV_8U,1)
+//#define CV_8UC2 CV_
