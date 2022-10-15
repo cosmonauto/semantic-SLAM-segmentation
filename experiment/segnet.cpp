@@ -55,4 +55,9 @@ int main(int argc, char** argv)
         // Prediction
         cv::imshow("frame", frame);
         cv::Mat segnet_frame ;
-      
+        cv::resize(frame, segnet_frame, cv::Size(480,360));
+
+        std::vector<Prediction> predictions = classifier.Classify(segnet_frame);
+
+        //------------------------------------------------------------------------
+        //st
