@@ -60,4 +60,8 @@ int main(int argc, char** argv)
         std::vector<Prediction> predictions = classifier.Classify(segnet_frame);
 
         //------------------------------------------------------------------------
-        //st
+        //std::vector<Prediction> predictions = classifier.Classify(new_frame);
+        /* 在Caffe-Segnet的函数中，主要是Predict此部分代码
+         * std::vector<float> output = Predict(img);
+         * 输出的容器vector大小为宽*高，代表每个像素点的分类结果输出
+     
