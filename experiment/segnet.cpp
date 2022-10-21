@@ -80,4 +80,12 @@ int main(int argc, char** argv)
                 if(predictions[i_1*480+j_1].first=="Pavement")
                 {
                     predictions[i_1*480+j_1].second = 4;
-       
+                }
+                else if(predictions[i_1*480+j_1].first=="Road")
+                {
+                    continue;
+                }
+                else
+                {
+                    continue;
+           
