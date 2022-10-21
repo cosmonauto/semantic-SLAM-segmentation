@@ -76,4 +76,8 @@ int main(int argc, char** argv)
             for(int j_1=0;j_1<480;j_1++)
             {
                 Predictions_name[i_1][j_1]=predictions[i_1*480+j_1].first;
- 
+                Predictions_num[i_1][j_1]=predictions[i_1*480+j_1].second;
+                if(predictions[i_1*480+j_1].first=="Pavement")
+                {
+                    predictions[i_1*480+j_1].second = 4;
+       
