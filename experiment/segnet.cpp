@@ -88,4 +88,16 @@ int main(int argc, char** argv)
                 else
                 {
                     continue;
-           
+                }
+            }
+        }
+
+//		for(int i_1=0;i_1<360;i_1++)
+//		{
+//			for(int j_1=0;j_1<480;j_1++)
+//			{
+//				if((i_1>=310)&&(j_1>=240))
+//				{
+//					predictions[i_1*480+j_1].second = 4;;
+//				}
+//			}
