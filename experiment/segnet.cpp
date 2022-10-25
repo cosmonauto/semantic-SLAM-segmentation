@@ -107,4 +107,8 @@ int main(int argc, char** argv)
         for (int i = 0; i < 360; ++i)
         {
             uchar* segnet_ptr = segnet_fiter.ptr<uchar>(i);
-            for (int j
+            for (int j = 0; j < 480; ++j)
+            {
+                segnet_ptr[j*3+0] = predictions[i*480+j].second;
+                segnet_ptr[j*3+1] = predictions[i*480+j].second;
+                segnet_ptr[j*3+2] =
