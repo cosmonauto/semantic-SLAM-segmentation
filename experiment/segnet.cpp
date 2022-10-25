@@ -111,4 +111,14 @@ int main(int argc, char** argv)
             {
                 segnet_ptr[j*3+0] = predictions[i*480+j].second;
                 segnet_ptr[j*3+1] = predictions[i*480+j].second;
-                segnet_ptr[j*3+2] =
+                segnet_ptr[j*3+2] = predictions[i*480+j].second;
+            }
+        }
+//		for(int i_1=0;i_1<360;i_1++)
+//		{
+//			for(int j_1=0;j_1<480;j_1++)
+//			{
+//				if((i_1==310)||(j_1==240))
+//				{
+//					segnet_fiter.at<cv::Vec3b>(i_1,j_1)[0]=255;
+//					s
