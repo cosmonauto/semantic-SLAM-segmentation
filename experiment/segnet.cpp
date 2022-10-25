@@ -101,3 +101,10 @@ int main(int argc, char** argv)
 //					predictions[i_1*480+j_1].second = 4;;
 //				}
 //			}
+//		}
+
+        cv::Mat segnet_fiter(segnet_frame.size(), CV_8UC3, cv::Scalar(0,0,0));
+        for (int i = 0; i < 360; ++i)
+        {
+            uchar* segnet_ptr = segnet_fiter.ptr<uchar>(i);
+            for (int j
