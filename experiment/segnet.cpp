@@ -128,4 +128,10 @@ int main(int argc, char** argv)
 //		}
         //------------------------------------------------------------------------
 
-        cv::Mat segn
+        cv::Mat segnet(segnet_frame.size(), CV_8UC3, cv::Scalar(0,0,0));
+        for (int i = 0; i < 360; ++i)
+        {
+            uchar* segnet_ptr = segnet.ptr<uchar>(i);
+            for (int j = 0; j < 480; ++j)
+            {
+         
