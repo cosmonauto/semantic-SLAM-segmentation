@@ -121,4 +121,11 @@ int main(int argc, char** argv)
 //				if((i_1==310)||(j_1==240))
 //				{
 //					segnet_fiter.at<cv::Vec3b>(i_1,j_1)[0]=255;
-//					s
+//					segnet_fiter.at<cv::Vec3b>(i_1,j_1)[1]=255;
+//					segnet_fiter.at<cv::Vec3b>(i_1,j_1)[2]=255;
+//				}
+//			}
+//		}
+        //------------------------------------------------------------------------
+
+        cv::Mat segn
