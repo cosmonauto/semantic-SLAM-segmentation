@@ -141,4 +141,9 @@ int main(int argc, char** argv)
         }
 
         // recover
-      
+        cv::resize(segnet, segnet, copy_frame.size());
+        cv::LUT(segnet, color, segnet);
+        cv::dilate(segnet, segnet, cv::Mat(1,1,CV_8UC1), cv::Point(-1,-1), 2);
+        cv::imshow("segnet", segnet);
+
+        cv::Ma
