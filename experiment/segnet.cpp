@@ -134,4 +134,11 @@ int main(int argc, char** argv)
             uchar* segnet_ptr = segnet.ptr<uchar>(i);
             for (int j = 0; j < 480; ++j)
             {
-         
+                segnet_ptr[j*3+0] = predictions[i*480+j].second;
+                segnet_ptr[j*3+1] = predictions[i*480+j].second;
+                segnet_ptr[j*3+2] = predictions[i*480+j].second;
+            }
+        }
+
+        // recover
+      
