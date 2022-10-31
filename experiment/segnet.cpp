@@ -146,4 +146,10 @@ int main(int argc, char** argv)
         cv::dilate(segnet, segnet, cv::Mat(1,1,CV_8UC1), cv::Point(-1,-1), 2);
         cv::imshow("segnet", segnet);
 
-        cv::Ma
+        cv::Mat result;
+        cv::addWeighted(segnet, 0.7, copy_frame, 0.7, 0, result);
+        cv::imshow("result", result);
+
+        // Counting time
+        clock_t endtime=clock();
+        std::cout<<"No. "<<i<<" time: "<<(
