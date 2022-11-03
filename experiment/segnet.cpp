@@ -159,4 +159,12 @@ int main(int argc, char** argv)
 
 #if datasetvalue==0
         sprintf(file_save1, "/home/relaybot/Mu_Link/KittiData/05/segnet_0/%06d.png",i);
-        sprintf(file_sav
+        sprintf(file_save, "/home/relaybot/Mu_Link/KittiData/05/result_0/%06d.png",i);
+#elif datasetvalue==1
+        sprintf(file_save, "../Image_Test/mu/segnet/%04d.png",i);
+#else
+        cout<<"没有定义数据集"<<endl;
+#endif
+
+        cv::imwrite(file_save, result);
+  
