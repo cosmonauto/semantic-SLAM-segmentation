@@ -152,4 +152,11 @@ int main(int argc, char** argv)
 
         // Counting time
         clock_t endtime=clock();
-        std::cout<<"No. "<<i<<" time: "<<(
+        std::cout<<"No. "<<i<<" time: "<<(endtime - starttime)/1000<<" ms"<<endl;
+
+        char file_save[256];
+        char file_save1[256];
+
+#if datasetvalue==0
+        sprintf(file_save1, "/home/relaybot/Mu_Link/KittiData/05/segnet_0/%06d.png",i);
+        sprintf(file_sav
