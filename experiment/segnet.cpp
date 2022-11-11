@@ -167,4 +167,12 @@ int main(int argc, char** argv)
 #endif
 
         cv::imwrite(file_save, result);
-  
+        cv::imwrite(file_save1, segnet);
+        cv::waitKey(1);
+    }
+    return 0;
+}
+
+/*
+P0: 7.070912000000e+02 0.000000000000e+00 6.018873000000e+02 0.000000000000e+00
+    0.000000000000e+00 7.070912000000e+02 1.831104
