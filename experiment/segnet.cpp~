@@ -13,4 +13,12 @@
 
 using namespace std;
 
-int main(int ar
+int main(int argc, char** argv) 
+{
+	// Load network
+	Classifier classifier;
+	string colorfile = "/home/relaybot/Desktop/slam3d/models/color.png";
+	cv::Mat color = cv::imread(colorfile, 1);
+
+	// Load image
+	for (in
