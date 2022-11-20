@@ -21,4 +21,9 @@ int main(int argc, char** argv)
 	cv::Mat color = cv::imread(colorfile, 1);
 
 	// Load image
-	for (in
+	for (int i = 0; i < 1; i++)
+	{
+		char file_name[256];
+		//sprintf(file_name, "/home/leo/slam3d/dataset/KITTI_SEMANTIC/Training_00/RGB/1/%06d.png", i);
+		//sprintf(file_name, "/home/leo/T3-2.jpg");
+                sprintf(
