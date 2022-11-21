@@ -26,4 +26,8 @@ int main(int argc, char** argv)
 		char file_name[256];
 		//sprintf(file_name, "/home/leo/slam3d/dataset/KITTI_SEMANTIC/Training_00/RGB/1/%06d.png", i);
 		//sprintf(file_name, "/home/leo/T3-2.jpg");
-                sprintf(
+                sprintf(file_name, "/home/relaybot/Desktop/slam3d/dataset/KITTI_SEMANTIC/Training_00/RGB/ppm/%06d.png",i);
+
+		cv::Mat frame = cv::imread(file_name, 1);
+		cv::resize(frame, frame, cv::Size(480,360));
+		if(frame.size().width<=0)
