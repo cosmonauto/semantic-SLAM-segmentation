@@ -30,4 +30,14 @@ int main(int argc, char** argv)
 
 		cv::Mat frame = cv::imread(file_name, 1);
 		cv::resize(frame, frame, cv::Size(480,360));
-		if(frame.size().width<=0)
+		if(frame.size().width<=0)continue;
+		//cv::Mat frame = cv::imread("/home/leo/000785.png", 1);
+		cv::Mat copy_frame = frame.clone();
+
+		// time
+		clock_t starttime=clock();
+
+		// Prediction
+		cv::resize(frame, frame, cv::Size(480,360));
+		cv::imshow("frame", frame);
+		
