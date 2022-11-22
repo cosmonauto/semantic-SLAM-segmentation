@@ -40,4 +40,9 @@ int main(int argc, char** argv)
 		// Prediction
 		cv::resize(frame, frame, cv::Size(480,360));
 		cv::imshow("frame", frame);
-		
+		//cv::waitKey(0);
+		std::vector<Prediction> predictions = classifier.Classify(frame);
+		cv::Mat segnet(frame.size(), CV_8UC3, cv::Scalar(0,0,0));
+		for (int i = 0; i < 360; ++i)
+		{	
+			uchar* segnet_p
