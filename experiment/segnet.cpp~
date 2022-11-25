@@ -59,4 +59,11 @@ int main(int argc, char** argv)
 		cv::LUT(segnet, color, segnet);
 		cv::imshow("segnet", segnet);
 		//cv::waitKey(0);
-		cv::Mat 
+		cv::Mat result;
+		cv::addWeighted(segnet, 0.7, copy_frame, 1.0, 0, result);
+		cv::imshow("result", result);
+		//cv::waitKey(0);
+
+		// Counting time
+		clock_t endtime=clock();
+		std::cout<<"No. "<<i<<" time: "<<(endtime - starttim
