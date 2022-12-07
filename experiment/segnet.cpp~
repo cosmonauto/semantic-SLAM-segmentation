@@ -71,4 +71,12 @@ int main(int argc, char** argv)
 		char file_save[256];
 		//sprintf(file_save, "/home/leo/slam3d/dataset/KITTI_SEMANTIC/Training_00/segnet/%06d.png", i);
 		sprintf(file_save, "/home/leo/segnet.jpg");
-                sprintf
+                sprintf(file_save, "/home/relaybot/Desktop/slam3d/dataset/KITTI_SEMANTIC/Training_00/segnet/ppm/%06d.png",i);
+		cv::imwrite(file_save, segnet);
+
+		cv::waitKey(1);
+	}
+	return 0;
+}
+
+
