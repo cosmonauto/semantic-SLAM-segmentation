@@ -66,4 +66,9 @@ int main(int argc, char** argv)
 
 		// Counting time
 		clock_t endtime=clock();
-		std::cout<<"No. "<<i<<" time: "<<(endtime - starttim
+		std::cout<<"No. "<<i<<" time: "<<(endtime - starttime)/1000<<" ms"<<endl;
+
+		char file_save[256];
+		//sprintf(file_save, "/home/leo/slam3d/dataset/KITTI_SEMANTIC/Training_00/segnet/%06d.png", i);
+		sprintf(file_save, "/home/leo/segnet.jpg");
+                sprintf
