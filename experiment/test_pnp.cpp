@@ -47,4 +47,9 @@ int main()
         }
         else
         {
-            currFrame->T_f_w 
+            currFrame->T_f_w = info.T * refFrame->T_f_w;
+            cout<<"result.T="<<endl;
+            cout<<info.T.matrix()<<endl;
+            cout<<"current = "<< endl << currFrame->T_f_w.matrix() << endl;
+            speed = info.T;
+            refFra
