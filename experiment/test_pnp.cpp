@@ -18,4 +18,9 @@ int main()
     Eigen::Isometry3d   speed = Eigen::Isometry3d::Identity();
 
     // plot
-    string pose_file 
+    string pose_file = para.getData<string>("gtpose_source");
+    std::cout << "Sequence: " << pose_file << std::endl;
+    PoseReader poseReader(pose_file);
+    cv::Mat poseMap(1500,1500,CV_8UC3,cv::Scalar(0,0,0));
+    int n = 0;
+    while (1)
