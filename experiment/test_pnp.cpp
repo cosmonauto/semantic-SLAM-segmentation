@@ -32,4 +32,11 @@ int main()
         if ( currFrame == nullptr )
         {
             break;
-   
+        }
+        currFrame->T_f_w = speed * refFrame->T_f_w ;
+        orb.detectFeatures( currFrame );
+
+        PNP_INFORMATION info;
+        bool result = pnp.solvePnPLazy( refFrame, currFrame, info, true );
+
+        if 
