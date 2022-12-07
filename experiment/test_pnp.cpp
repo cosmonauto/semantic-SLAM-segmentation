@@ -24,3 +24,12 @@ int main()
     cv::Mat poseMap(1500,1500,CV_8UC3,cv::Scalar(0,0,0));
     int n = 0;
     while (1)
+    {
+        cout<<"*************************************"<<endl;
+        boost::timer timer;
+        RGBDFrame::Ptr currFrame = frameReader.next();
+
+        if ( currFrame == nullptr )
+        {
+            break;
+   
