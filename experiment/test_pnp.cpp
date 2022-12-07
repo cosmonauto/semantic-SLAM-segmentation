@@ -39,4 +39,12 @@ int main()
         PNP_INFORMATION info;
         bool result = pnp.solvePnPLazy( refFrame, currFrame, info, true );
 
-        if 
+        if ( result == false )
+        {
+            cout<<"pnp failed"<<endl;
+            refFrame = currFrame;
+            cv::waitKey(1);
+        }
+        else
+        {
+            currFrame->T_f_w 
