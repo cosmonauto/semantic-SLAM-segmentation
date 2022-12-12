@@ -52,4 +52,12 @@ int main()
             cout<<info.T.matrix()<<endl;
             cout<<"current = "<< endl << currFrame->T_f_w.matrix() << endl;
             speed = info.T;
-            refFra
+            refFrame = currFrame;
+            cv::waitKey(2);
+        }
+
+        cout<<GREEN<<"time used = "<<timer.elapsed()<<RESET<<endl;
+
+	int x = -currFrame->T_f_w(0,3);
+	int y = -currFrame->T_f_w(2,3);
+	cout <
