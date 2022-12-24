@@ -68,4 +68,10 @@ int main()
 	poseReader.getData(n+1, gtpose);
 
 	cv::circle(poseMap, cv::Point(poseMap.cols/2+x, poseMap.rows/2-y), 2, cv::Scalar(255,0,0));  
-	
+	cv::circle(poseMap, cv::Point(poseMap.cols/2+gtpose.ptr<double>(0)[3], poseMap.rows/2-gtpose.ptr<double>(2)[3]), 2, cv::Scalar(0,0,255));  
+	cv::namedWindow("pose", 0);
+	cv::imshow("pose", poseMap);
+	cv::waitKey(3);
+    }
+
+    
