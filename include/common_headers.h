@@ -16,4 +16,12 @@
 using namespace std;
 
 // Eigen
-#include <Ei
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+
+// OpenCV
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/core/eigen.hpp>
+#include "opencv2/imgp
