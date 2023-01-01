@@ -24,4 +24,14 @@ using namespace std;
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/core/eigen.hpp>
-#include "opencv2/imgp
+#include "opencv2/imgproc/imgproc.hpp"
+
+// boost
+#include <boost/format.hpp>
+#include <boost/timer.hpp>
+#include <boost/lexical_cast.hpp>
+
+// g2o
+#include <g2o/core/block_solver.h>
+#include <g2o/core/optimization_algorithm_levenberg.h>
+#include <g2o/solvers
