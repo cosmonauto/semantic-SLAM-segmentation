@@ -39,4 +39,10 @@ using namespace std;
 #include <g2o/types/sba/types_six_dof_expmap.h>
 #include <g2o/core/robust_kernel_impl.h>
 #include <g2o/solvers/dense/linear_solver_dense.h>
-#i
+#include <g2o/types/sim3/types_seven_dof_expmap.h>
+#include <g2o/types/slam3d/vertex_se3.h>
+#include <g2o/types/slam3d/edge_se3.h>
+
+//the following are UBUNTU/LINUX ONLY terminal color
+#define RESET "\033[0m"
+#define BLACK "\033[3
