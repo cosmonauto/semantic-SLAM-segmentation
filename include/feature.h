@@ -6,4 +6,12 @@
 namespace rgbd_tutor
 {
 
-cl
+class Feature
+{
+public:
+    Feature( ) {}
+public:
+    cv::KeyPoint    keypoint;
+    cv::Mat         descriptor;
+    cv::Point3f     position;       // position in 3D space
+    float           observe_frequency = 0.0;   
