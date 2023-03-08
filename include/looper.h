@@ -33,4 +33,11 @@ public:
 
         min_sim_score = para.getData<float>("looper_min_sim_score");
         min_interval = para.getData<int>("looper_min_interval");
-    
+    }
+
+    // 往数据库里增加一条frame记录
+    void add( RGBDFrame::Ptr& frame )
+    {
+        vector<cv::Mat> desps = frame->getAllDescriptorsVec();
+        DBoW2::FeatureVector featVec;
+        vocab.transform( desps, frame->b
