@@ -40,4 +40,15 @@ public:
     {
         vector<cv::Mat> desps = frame->getAllDescriptorsVec();
         DBoW2::FeatureVector featVec;
-        vocab.transform( desps, frame->b
+        vocab.transform( desps, frame->bowVec, featVec, 4);
+        frames.push_back( frame );
+    }
+
+    // 获取可能的loops
+    vector<RGBDFrame::Ptr> getPossibleLoops( const RGBDFrame::Ptr& frame );
+
+
+    // TODO
+    void save() {}
+    void load() {}
+prote
