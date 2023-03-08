@@ -51,4 +51,9 @@ public:
     // TODO
     void save() {}
     void load() {}
-prote
+protected:
+
+    DBoW2::TemplatedVocabulary<DBoW2::FORB::TDescriptor, DBoW2::FORB>    vocab;     //字典文件
+    vector<RGBDFrame::Ptr>      frames;
+    const ParameterReader&      parameterReader;
+    float 
