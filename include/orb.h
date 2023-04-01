@@ -22,4 +22,7 @@ public:
         float   scale = para.getData<float>("orb_scale");
         int     level = para.getData<int>("orb_levels");
         int     ini   = para.getData<int>("orb_iniThFAST");
-        int     min   = 
+        int     min   = para.getData<int>("orb_minThFAST");
+        extractor = make_shared<ORB_SLAM2::ORBextractor>( features, scale, level, ini, min );
+        matcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+        knn_match_ratio = para.getData<double>("knn_m
