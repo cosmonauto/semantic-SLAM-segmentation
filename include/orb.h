@@ -18,4 +18,8 @@ class OrbFeature
 public:
     OrbFeature( const rgbd_tutor::ParameterReader& para )
     {
-        int features  = para
+        int features  = para.getData<int>("orb_features");
+        float   scale = para.getData<float>("orb_scale");
+        int     level = para.getData<int>("orb_levels");
+        int     ini   = para.getData<int>("orb_iniThFAST");
+        int     min   = 
