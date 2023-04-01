@@ -25,4 +25,14 @@ public:
         int     min   = para.getData<int>("orb_minThFAST");
         extractor = make_shared<ORB_SLAM2::ORBextractor>( features, scale, level, ini, min );
         matcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
-        knn_match_ratio = para.getData<double>("knn_m
+        knn_match_ratio = para.getData<double>("knn_match_ratio");
+    }
+
+    // 提取特征，存放到frame的成员变量中
+    void detectFeatures( rgbd_tutor::RGBDFrame::Ptr& frame ) const
+    {
+        cv::Mat gray = frame->rgb;
+
+        if (frame->rgb.channels() == 3)
+        {
+  
