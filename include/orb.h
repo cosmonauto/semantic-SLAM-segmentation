@@ -41,4 +41,10 @@ public:
 
         vector<cv::KeyPoint>    kps;
         cv::Mat     desps;
-        (*extractor) ( gray, cv::Mat(
+        (*extractor) ( gray, cv::Mat(), kps, desps);
+        for ( size_t i=0; i<kps.size(); i++ )
+        {
+            rgbd_tutor::Feature feature;
+            feature.keypoint = kps[i];
+            feature.descriptor  = desps.row(i).clone();
+            feature.posi
