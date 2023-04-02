@@ -35,4 +35,10 @@ public:
 
         if (frame->rgb.channels() == 3)
         {
-  
+            // The BGR image
+            cv::cvtColor( frame->rgb, gray, cv::COLOR_BGR2GRAY );
+        }
+
+        vector<cv::KeyPoint>    kps;
+        cv::Mat     desps;
+        (*extractor) ( gray, cv::Mat(
