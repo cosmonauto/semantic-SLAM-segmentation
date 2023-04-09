@@ -37,3 +37,8 @@ public:
     PoseGraph( const ParameterReader& para, shared_ptr<Tracker>& t ) : parameterReader( para ), tracker( t )
     {
         looper  =   make_shared<Looper>( para );
+        orb     =   make_shared<OrbFeature>( para );
+        pnp     =   make_shared<PnPSolver>( para, *orb );
+
+        keyframe_min_translation = para.getData<double>("keyframe_min_translation");
+        keyframe_min_
