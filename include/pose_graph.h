@@ -45,4 +45,9 @@ public:
         nearbyFrames = para.getData<int>("nearby_keyframes");
     
         loopAccuError = para.getData<double>("loop_accumulate_error");                
-        localAccuError = para.getData<d
+        localAccuError = para.getData<double>("local_accumulate_error");                
+
+        posegraphThread = make_shared<std::thread> (
+                    std::bind(&PoseGraph::mainLoop, this) );
+
+        g2o::LinearSolverCholmod<g2o::BlockSolver<g2o::BlockSolverTra
