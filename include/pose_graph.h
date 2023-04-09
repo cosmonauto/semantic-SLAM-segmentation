@@ -41,4 +41,8 @@ public:
         pnp     =   make_shared<PnPSolver>( para, *orb );
 
         keyframe_min_translation = para.getData<double>("keyframe_min_translation");
-        keyframe_min_
+        keyframe_min_rotation = para.getData<double>("keyframe_min_rotation");
+        nearbyFrames = para.getData<int>("nearby_keyframes");
+    
+        loopAccuError = para.getData<double>("loop_accumulate_error");                
+        localAccuError = para.getData<d
