@@ -50,4 +50,6 @@ public:
         posegraphThread = make_shared<std::thread> (
                     std::bind(&PoseGraph::mainLoop, this) );
 
-        g2o::LinearSolverCholmod<g2o::BlockSolver<g2o::BlockSolverTra
+        g2o::LinearSolverCholmod<g2o::BlockSolver<g2o::BlockSolverTraits<6,3> >::PoseMatrixType > * linearSolver = new g2o::LinearSolverCholmod<g2o::BlockSolver<g2o::BlockSolverTraits<6,3> >::PoseMatrixType > ();
+
+        //g2o::BlockSolver_6_3::LinearSolverType* linearSolver = new g2o::L
