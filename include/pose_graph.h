@@ -52,4 +52,7 @@ public:
 
         g2o::LinearSolverCholmod<g2o::BlockSolver<g2o::BlockSolverTraits<6,3> >::PoseMatrixType > * linearSolver = new g2o::LinearSolverCholmod<g2o::BlockSolver<g2o::BlockSolverTraits<6,3> >::PoseMatrixType > ();
 
-        //g2o::BlockSolver_6_3::LinearSolverType* linearSolver = new g2o::L
+        //g2o::BlockSolver_6_3::LinearSolverType* linearSolver = new g2o::LinearSolverDense<g2o::BlockSolver_6_3::PoseMatrixType> ();
+        linearSolver->setBlockOrdering( false );
+
+        g2o::BlockSolver< g2o::BlockSolverTraits<6,3> >* solver = new g2o::BlockSolver< g2o
