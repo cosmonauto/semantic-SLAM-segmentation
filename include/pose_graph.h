@@ -58,4 +58,16 @@ public:
         g2o::BlockSolver< g2o::BlockSolverTraits<6,3> >* solver = new g2o::BlockSolver< g2o::BlockSolverTraits<6,3> >( linearSolver );
         //g2o::BlockSolver_6_3*   solver_ptr = new g2o::BlockSolver_6_3(linearSolver);
 
-        g2o::OptimizationAlgorithmLevenberg* algo = new g2o::OptimizationAlgorithmLevenber
+        g2o::OptimizationAlgorithmLevenberg* algo = new g2o::OptimizationAlgorithmLevenberg( solver );
+        optimizer.setAlgorithm( algo );
+        optimizer.setVerbose(false);
+
+    }
+
+    // 试图插入一个新的keyframe，失败返回false
+    bool    tryInsertKeyFrame( RGBDFrame::Ptr& frame );
+
+    //主线程
+    void    mainLoop();
+
+    void    sh
