@@ -70,4 +70,11 @@ public:
     //主线程
     void    mainLoop();
 
-    void    sh
+    void    shutdown()
+    {
+        shutDownFlag = true;
+        keyframe_updated.notify_all();
+        cout<<"please wait pose graph thread to stop..."<<endl;
+        if (posegraphThread != nullptr)
+        {
+            posegraphThread->j
