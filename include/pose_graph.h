@@ -85,4 +85,12 @@ public:
         cout<<"vertex: "<<optimizer.vertices().size()<<endl;
         cout<<"edges: "<<optimizer.edges().size()<<endl;
         save( "traj.g2o" );
-   
+        cout<<"trajectory ok."<<RESET<<endl;
+
+        if ( optimizer.vertices().size() > 5)
+        {
+            // 太少了就不优化了
+            optimizer.initializeOptimization();
+            optimizer.optimize( 10 );
+        }
+  
