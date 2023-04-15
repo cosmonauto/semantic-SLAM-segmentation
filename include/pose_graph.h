@@ -93,4 +93,12 @@ public:
             optimizer.initializeOptimization();
             optimizer.optimize( 10 );
         }
-  
+    }
+
+    void save( const string& filename )
+    {
+        ofstream fout(filename);
+        /*
+        for ( size_t i=0; i< keyframes.size(); i++ )
+        {
+            g2o::VertexSE3* v = dynamic_cast<g2o::Vertex
