@@ -101,4 +101,9 @@ public:
         /*
         for ( size_t i=0; i< keyframes.size(); i++ )
         {
-            g2o::VertexSE3* v = dynamic_cast<g2o::Vertex
+            g2o::VertexSE3* v = dynamic_cast<g2o::VertexSE3*> (optimizer.vertices()[ keyframes[i]->id ]);
+            if (v == nullptr)
+            {
+                cerr<<"vertex "<<keyframes[i]->id<<" does not exist!"<<endl;
+                continue;
+  
