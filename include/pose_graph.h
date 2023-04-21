@@ -106,4 +106,9 @@ public:
             {
                 cerr<<"vertex "<<keyframes[i]->id<<" does not exist!"<<endl;
                 continue;
-  
+            }
+            double data[7] = {0};
+            v->getEstimateData( data );
+            fout<<"VERTEX_SE3:QUAT "<<v->id()<<" ";
+            for ( double d:data )
+                fout<<d<<" 
