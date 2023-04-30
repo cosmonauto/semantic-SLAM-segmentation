@@ -111,4 +111,11 @@ public:
             v->getEstimateData( data );
             fout<<"VERTEX_SE3:QUAT "<<v->id()<<" ";
             for ( double d:data )
-                fout<<d<<" 
+                fout<<d<<" ";
+            fout<<endl;
+        }
+
+        for ( size_t i=0; i<edges.size(); i++ )
+        {
+            g2o::EdgeSE3 edge = *edges[i];
+            fout<<"EDGE_SE3:QUAT "<<edge.vertices()[0]->id()<<" "<<edge.vertices()[1]->id()<<"
