@@ -118,4 +118,9 @@ public:
         for ( size_t i=0; i<edges.size(); i++ )
         {
             g2o::EdgeSE3 edge = *edges[i];
-            fout<<"EDGE_SE3:QUAT "<<edge.vertices()[0]->id()<<" "<<edge.vertices()[1]->id()<<"
+            fout<<"EDGE_SE3:QUAT "<<edge.vertices()[0]->id()<<" "<<edge.vertices()[1]->id()<<" ";
+            double data[7] = {0};
+            edge.getMeasurementData( data );
+            for ( double d:data )
+                fout<<d<<" ";
+            fout<<"100 0 0 0 0 0 100 0 0 0 0 100 0 0 0 100 0 0 100 0 100"<<en
