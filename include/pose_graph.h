@@ -123,4 +123,16 @@ public:
             edge.getMeasurementData( data );
             for ( double d:data )
                 fout<<d<<" ";
-            fout<<"100 0 0 0 0 0 100 0 0 0 0 100 0 0 0 100 0 0 100 0 100"<<en
+            fout<<"100 0 0 0 0 0 100 0 0 0 0 100 0 0 0 100 0 0 100 0 100"<<endl;
+        }
+        */
+        if (fout)
+        {
+            optimizer.save(filename.c_str());
+            fout.close();
+        }
+    }
+
+protected:
+    //  检测限定端点的边是否存在
+    bool    isEdgeExist( const int 
