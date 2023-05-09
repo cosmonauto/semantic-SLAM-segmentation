@@ -135,4 +135,10 @@ public:
 
 protected:
     //  检测限定端点的边是否存在
-    bool    isEdgeExist( const int 
+    bool    isEdgeExist( const int vertex1, const int vertex2 ) const
+    {
+        if ( vertex1==vertex2 )
+            return true;
+        EdgeID e1, e2;
+        e1[vertex1] = vertex2; e2[vertex2]=vertex1;
+        return edges.find( e1 ) != edges.end()
