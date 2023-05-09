@@ -141,4 +141,14 @@ protected:
             return true;
         EdgeID e1, e2;
         e1[vertex1] = vertex2; e2[vertex2]=vertex1;
-        return edges.find( e1 ) != edges.end()
+        return edges.find( e1 ) != edges.end() ||
+                edges.find( e2 ) != edges.end() ;
+    }
+
+public:
+    //数据
+    vector<RGBDFrame::Ptr>  keyframes;
+    vector<RGBDFrame::Ptr>  newFrames;      //新关键帧的缓冲区
+    RGBDFrame::Ptr          refFrame;       //参考
+
+    std:
