@@ -151,4 +151,11 @@ public:
     vector<RGBDFrame::Ptr>  newFrames;      //新关键帧的缓冲区
     RGBDFrame::Ptr          refFrame;       //参考
 
-    std:
+    std::condition_variable keyframe_updated;
+    std::mutex              keyframe_updated_mutex; 
+    
+    bool                    shutDownFlag    =false;
+    std::mutex              keyframes_mutex;
+
+    // 有用的loop之类的东西
+    shared_ptr<Lo
