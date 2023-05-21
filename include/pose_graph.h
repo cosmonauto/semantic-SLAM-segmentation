@@ -158,4 +158,12 @@ public:
     std::mutex              keyframes_mutex;
 
     // 有用的loop之类的东西
-    shared_ptr<Lo
+    shared_ptr<Looper>      looper      =nullptr;
+    shared_ptr<PnPSolver>   pnp         =nullptr;
+    shared_ptr<OrbFeature>  orb         =nullptr;
+
+    // pose graph 线程
+    shared_ptr<std::thread> posegraphThread =nullptr;
+
+    // tracker 调整当前的姿态
+   
