@@ -166,4 +166,12 @@ public:
     shared_ptr<std::thread> posegraphThread =nullptr;
 
     // tracker 调整当前的姿态
-   
+    shared_ptr<Tracker>     tracker     =nullptr;
+
+    // g2o的优化器
+    g2o::SparseOptimizer    optimizer;
+
+    // 点集与边集
+    vector<int>             vertexIdx;
+    typedef map<int,int>    EdgeID;
+    map< EdgeID, g2o::EdgeSE3* > e
