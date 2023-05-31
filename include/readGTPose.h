@@ -23,4 +23,18 @@ using namespace std;
 #define BOLDBLUE "\033[1m\033[34m" /* Bold Blue */
 #define BOLDMAGENTA "\033[1m\033[35m" /* Bold Magenta */
 #define BOLDCYAN "\033[1m\033[36m" /* Bold Cyan */
-#define BOLDWHITE 
+#define BOLDWHITE "\033[1m\033[37m" /* Bold White */
+
+struct POSEFRAME
+{
+	double pose[12];
+};
+
+// 参数读取类
+class PoseReader
+{
+public:
+    PoseReader( string filename="../../05.txt" )
+    {
+        ifstream infile( filename.c_str() );
+        if (
