@@ -37,4 +37,12 @@ public:
     PoseReader( string filename="../../05.txt" )
     {
         ifstream infile( filename.c_str() );
-        if (
+        if (!infile)
+        {
+            cerr<<"parameter file does not exist."<<endl;
+            return;
+        }
+        while (!infile.eof())
+        {
+            POSEFRAME tmpPose;
+            infile >> tmpPose.pose[0]
