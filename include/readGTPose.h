@@ -62,4 +62,13 @@ public:
             return;
         }
 
-        std::vector<POSEFRAME>::iterator iter = po
+        std::vector<POSEFRAME>::iterator iter = poseframe.begin();
+        iter += index;
+        poseMatrix = cv::Mat::zeros(3,4,CV_64FC1);
+
+    	for (int i = 0; i < 12; i++)
+    	{
+            poseMatrix.at<double>(i/4, i%4) = (*iter).pose[i];
+    	}
+
+        //std::cout << BOLDWHIT
