@@ -56,4 +56,10 @@ public:
     void getData( int index, cv::Mat& poseMatrix )
     {
         // Index Boundary Control
-        if (index > posef
+        if (index > poseframe.size()-2) 
+        {
+            std::cout << BOLDRED"ERROR! INDEX OUT OF RANGE!" << RESET" " << std::endl;
+            return;
+        }
+
+        std::vector<POSEFRAME>::iterator iter = po
