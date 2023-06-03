@@ -47,4 +47,13 @@ public:
             POSEFRAME tmpPose;
             infile >> tmpPose.pose[0] >> tmpPose.pose[1] >> tmpPose.pose[2] >> tmpPose.pose[3]
                      >> tmpPose.pose[4] >> tmpPose.pose[5] >> tmpPose.pose[6] >> tmpPose.pose[7]
-                      >> tmpPose.pose[8] >> tmpPose.pose[9] >> tmpPose.pose
+                      >> tmpPose.pose[8] >> tmpPose.pose[9] >> tmpPose.pose[10] >> tmpPose.pose[11];
+            poseframe.push_back(tmpPose);
+        }
+        infile.close();
+    }
+
+    void getData( int index, cv::Mat& poseMatrix )
+    {
+        // Index Boundary Control
+        if (index > posef
