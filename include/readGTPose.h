@@ -71,4 +71,10 @@ public:
             poseMatrix.at<double>(i/4, i%4) = (*iter).pose[i];
     	}
 
-        //std::cout << BOLDWHIT
+        //std::cout << BOLDWHITE"GTPose[ " << index << "/" << poseframe.size()-2 << "]" << std::endl 
+        //                << BOLDGREEN"" << poseMatrix << RESET" " << std::endl << std::endl;
+    }
+
+private:
+    std::vector<POSEFRAME> poseframe;
+};
