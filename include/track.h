@@ -152,3 +152,47 @@ protected:
     // 数据
 
     // 当前帧
+    rgbd_tutor::RGBDFrame::Ptr  currentFrame    =nullptr;
+
+    // 当前帧的参考帧
+    // 队列结构，长度固定
+    deque< RGBDFrame::Ptr >  refFrames;
+    int refFramesSize   =5;
+    Eigen::Isometry3d   lastPose = Eigen::Isometry3d::Identity();
+    
+    // 速度
+    Eigen::Isometry3d   speed;
+
+    // 参数
+    const rgbd_tutor::ParameterReader&   parameterReader;
+
+    // 状态
+    trackerState    state   =NOT_READY;
+
+    // 参数
+    int     cntLost = 0;
+    int     max_lost_frame = 5;
+
+    // pose graph 
+    shared_ptr<PoseGraph>   poseGraph =nullptr;
+    mutex   adjustMutex;
+
+public:
+    // libviso2
+    Matrix_ pose = Matrix_::eye(4); //visual odometry
+    Matrix_ poseChanged = Matrix_::eye(4); //visual odometry
+    VisualOdometryStereo viso;
+    void estimateVO();
+
+protected:
+    // 其他用途
+    shared_ptr<rgbd_tutor::PnPSolver>   pnp;
+    shared_ptr<rgbd_tutor::OrbFeature>  orb;
+
+};
+
+}
+
+
+
+#endif // TRACK_H
