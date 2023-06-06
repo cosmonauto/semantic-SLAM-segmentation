@@ -9,4 +9,13 @@ namespace rgbd_tutor
 	{
 	    // 标准内参
 	    double cx=0, cy=0, fx=0, fy=0, scale=0;
-	
+	    // 畸变因子
+	    double d0=0, d1=0, d2=0, d3=0, d4=0;
+	};
+
+	inline double norm_translate( const Eigen::Isometry3d& T )
+	{
+	    return sqrt( T(0,3)*T(0,3) + T(1,3)*T(1,3) + T(2,3)*T(2,3) );
+	}
+
+	inline double norm_rot
