@@ -18,4 +18,10 @@ namespace rgbd_tutor
 	    return sqrt( T(0,3)*T(0,3) + T(1,3)*T(1,3) + T(2,3)*T(2,3) );
 	}
 
-	inline double norm_rot
+	inline double norm_rotate( const Eigen::Isometry3d& T )
+	{
+	    return acos( 0.5*(T(0,0)+T(1,1)+T(2,2) - 1) );
+	}
+}
+
+#endif // UTILS_H
