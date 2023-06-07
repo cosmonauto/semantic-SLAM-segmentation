@@ -83,3 +83,67 @@ class UVDisparity
                     cv::Mat& xyz, cv::Mat& roi_mask, Mat &ground_mask,
                     double& pitch1, double& pitch2);
 private:
+
+
+    /*** Calculate U-disparity image***/
+    void calUDisparity(const cv::Mat& img_dis, Mat& xyz, Mat &roi_mask, Mat &ground_mask);
+
+    /**Calculate V-disparity image**/
+    void calVDisparity(const cv::Mat& img_dis, Mat & xyz);
+
+    /**
+     *Estimate the pitch angle from V disparity map
+     *Remove ground plane the points outside the ROI3D
+    **/
+    vector<cv::Mat> Pitch_Classify(cv::Mat& xyz, Mat &ground_mask);
+
+    //filtering the matched feature points by ego-motion
+    void filterInOut(const cv::Mat& img_L, const cv::Mat& roi_mask, const Mat &sgbm_roi,
+                     VisualOdometryStereo& vo, const double pitch_);
+
+    //find all the candidates
+    void findAllMasks(const VisualOdometryStereo& vo,const cv::Mat& img_L,cv::Mat& xyz, cv::Mat& roi_mask);
+
+    //Segmentation in disparity map
+    void segmentation(const cv::Mat& disparity, const cv::Mat& img_L, cv::Mat& roi_mask, cv::Mat& mask_moving);
+    void confirmed();
+
+    //sigmoid function to adjust the intensity of U-disparity
+    double sigmoid(double t,double scale,double range, int mode);
+    void adjustUdisIntense(double scale, double range);
+
+    //judge functions for segments merging
+    bool isMasksSeparate();
+    bool isOverlapped(const cv::Mat &mask1, const cv::Mat &mask2);
+    bool isAllZero(const cv::Mat& mat);
+    bool isInMask(int u, int v, const cv::Mat& roi_mask);
+    int numInlierInMask(const cv::Mat & mask, const VisualOdometryStereo &vo, const cv::Mat &img_L);
+    void mergeMasks(); //merge overlapped segments
+
+    //improve the results by inliers
+    void verifyByInliers(const VisualOdometryStereo &vo, const cv::Mat &img_L);
+
+
+
+
+private:
+
+    int inlier_tolerance_;             //inlier tolerance threshold
+    int min_adjust_intense_;           //minum intensity for U adjustment
+    cv::Mat pitch1_measure,pitch2_measure;
+    double out_th_;                    //outlier rejection threshold
+    double pitch_;                     //pitch_ value of the ground plane
+    cv::KalmanFilter* pitch1_KF,*pitch2_KF;
+    ROI3D roi_;                        //3D space ROI parameters
+    CalibPars calib_;                   //camera calibration parameters
+    vector< vector<cv::Mat> > candidates_;
+    USegmentPars u_segment_par_;        //Disparity segmentation parameters
+
+    vector<cv::Mat> masks_;            // preliminary masks_ for the moving object
+
+    cv::Mat u_dis_int,u_dis_,u_dis_show;            // u_dis_int is the original u-disparity map
+    cv::Mat v_dis_int,v_dis_,v_dis_show;            // v_dis_int is the original v-disparity map
+    vector<cv::Mat> masks_confirmed_;
+};
+
+#endif
