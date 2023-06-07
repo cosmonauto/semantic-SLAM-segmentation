@@ -26,4 +26,13 @@ public:
     }
   };
     
-  // general par
+  // general parameters
+  struct parameters {
+    VisualOdometry::calibration calib;            // camera calibration parameters
+  };
+
+  // constructor
+  VisualOdometry (parameters param);
+  
+  // deconstructor
+  ~VisualOdome
