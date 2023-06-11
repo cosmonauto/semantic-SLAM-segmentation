@@ -57,4 +57,12 @@ public:
 public:
 
   std::vector<pmatch>  quadmatches;  // feature point matches
-  std::vector<pmatch>  quadmatches_
+  std::vector<pmatch>  quadmatches_inlier;  // feature point inliers
+  std::vector<pmatch>  quadmatches_outlier;  // feature point outliers
+
+protected:
+
+  // calls motion estimation
+  bool updateMotion ();
+
+  // compute transformation 
