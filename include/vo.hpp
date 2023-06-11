@@ -40,4 +40,9 @@ public:
 
   // returns transformation from previous to current coordinates as a 4x4
   // homogeneous transformation matrix Tr_delta, with the following semantics:
-  // p_t = Tr_delta * p_ {t-1} takes a 
+  // p_t = Tr_delta * p_ {t-1} takes a point in the camera coordinate system
+  // at time t_1 and maps it to the camera coordinate system at time t.
+  // note: getMotion() returns the last transformation
+  inline cv::Mat getMotion() { return Tr_delta;}
+  
+  // returns the n
