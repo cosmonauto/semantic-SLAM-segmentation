@@ -45,4 +45,8 @@ public:
   // note: getMotion() returns the last transformation
   inline cv::Mat getMotion() { return Tr_delta;}
   
-  // returns the n
+  // returns the number of successfully matched points
+  inline int getNumberOfMatches () { return quadmatches.size(); }
+  
+  // returns the number of inliers: num_inliers <= num_matched
+  inline int getNumberOfInliers () { return inliers
