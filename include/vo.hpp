@@ -49,4 +49,12 @@ public:
   inline int getNumberOfMatches () { return quadmatches.size(); }
   
   // returns the number of inliers: num_inliers <= num_matched
-  inline int getNumberOfInliers () { return inliers
+  inline int getNumberOfInliers () { return inliers.size(); }
+    
+  // returns the indices of all inliers
+  inline std::vector<int> getInlierIndices () { return inliers; }
+    
+public:
+
+  std::vector<pmatch>  quadmatches;  // feature point matches
+  std::vector<pmatch>  quadmatches_
