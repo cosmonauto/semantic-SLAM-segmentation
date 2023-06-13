@@ -69,4 +69,10 @@ protected:
   cv::Mat transformationVectorToMatrix (std::vector<double> tr);
 
   // compute motion from previous to current coordinate system
-  // if motion could not be computed, resultin
+  // if motion could not be computed, resulting vector will be of size 0
+  virtual std::vector<double> estimateMotion (std::vector<pmatch>& quadmatches) = 0;
+
+  // get random and unique sample of num numbers from 1:N
+  vector<int> getRandomSample(int N, int num);
+
+  cv::Mat           
