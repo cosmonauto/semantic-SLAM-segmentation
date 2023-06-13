@@ -65,4 +65,8 @@ protected:
   // calls motion estimation
   bool updateMotion ();
 
-  // compute transformation 
+  // compute transformation matrix from transformation vector
+  cv::Mat transformationVectorToMatrix (std::vector<double> tr);
+
+  // compute motion from previous to current coordinate system
+  // if motion could not be computed, resultin
