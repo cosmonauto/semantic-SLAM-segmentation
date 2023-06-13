@@ -75,4 +75,7 @@ protected:
   // get random and unique sample of num numbers from 1:N
   vector<int> getRandomSample(int N, int num);
 
-  cv::Mat           
+  cv::Mat                        Tr_delta; //transformation (previous -> current frame)
+  double                         *J;          // jacobian
+  double                         *p_observe;  // observed 2d points
+  double                  
