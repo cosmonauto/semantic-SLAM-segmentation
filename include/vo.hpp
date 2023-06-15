@@ -78,4 +78,10 @@ protected:
   cv::Mat                        Tr_delta; //transformation (previous -> current frame)
   double                         *J;          // jacobian
   double                         *p_observe;  // observed 2d points
-  double                  
+  double                         *p_predict;  // predicted 2d points
+  std::vector<int>               inliers;    // inlier set
+  std::vector<int>               outliers;    // outlier set
+
+private:
+  
+  parameters                    param;     // 
