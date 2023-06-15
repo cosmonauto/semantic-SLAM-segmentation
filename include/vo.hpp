@@ -84,4 +84,8 @@ protected:
 
 private:
   
-  parameters                    param;     // 
+  parameters                    param;     // common parameters
+};
+
+#endif // VO_H
+
