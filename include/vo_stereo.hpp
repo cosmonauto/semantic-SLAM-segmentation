@@ -8,4 +8,15 @@
 #define VO_STEREO_H
 
 #include "vo.hpp"
-#inclu
+#include <algorithm>
+#include "opencv2/core/core.hpp"
+#include <quadmatcher.hpp>
+using namespace std;
+
+class VisualOdometryStereo : public VisualOdometry
+{
+
+public:
+
+ 
+// stereo-specific parameters (mandatory:
