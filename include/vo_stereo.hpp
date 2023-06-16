@@ -30,4 +30,13 @@ public:
     {
       base             = 1.0;
       ransac_iters     = 200;
- 
+      inlier_threshold = 1.1f;
+      reweighting      = true;
+    }
+  };
+
+  // constructor, takes as inpute a parameter structure
+  VisualOdometryStereo (parameters param);
+  
+  // deconstructor
+  ~VisualOdo
