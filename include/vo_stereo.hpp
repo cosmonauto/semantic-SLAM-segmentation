@@ -24,4 +24,10 @@ public:
   {
     double  base;             // baseline (meters)
     int ransac_iters;         // number of RANSAC iterations
-    double  inlier_threshold; // fund
+    double  inlier_threshold; // fundamental matrix inlier threshold
+    bool    reweighting;      // lower border weights (more robust to calibration errors)
+    parameters ()
+    {
+      base             = 1.0;
+      ransac_iters     = 200;
+ 
