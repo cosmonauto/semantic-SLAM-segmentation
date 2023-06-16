@@ -19,4 +19,9 @@ class VisualOdometryStereo : public VisualOdometry
 public:
 
  
-// stereo-specific parameters (mandatory:
+// stereo-specific parameters (mandatory: base)
+  struct parameters : public VisualOdometry::parameters
+  {
+    double  base;             // baseline (meters)
+    int ransac_iters;         // number of RANSAC iterations
+    double  inlier_threshold; // fund
