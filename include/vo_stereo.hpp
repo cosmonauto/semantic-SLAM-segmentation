@@ -46,4 +46,7 @@ public:
   // inputs: I1 ........ pointer to rectified left image (uint8, row-aligned)
   //         I2 ........ pointer to rectified right image (uint8, row-aligned)
   //         dims[0] ... width of I1 and I2 (both must be of same size)
-  //         dims[1] ... height of
+  //         dims[1] ... height of I1 and I2 (both must be of same size)
+  //         dims[2] ... bytes per line (often equal to width)
+  //         replace ... replace current images with I1 and I2, without copying last current
+  //                     im
