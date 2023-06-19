@@ -43,4 +43,7 @@ public:
   
   // process a new images, push the images back to an internal ring buffer.
   // valid motion estimates are available after calling process for two times.
-  // inputs: I1 ........ pointer to rect
+  // inputs: I1 ........ pointer to rectified left image (uint8, row-aligned)
+  //         I2 ........ pointer to rectified right image (uint8, row-aligned)
+  //         dims[0] ... width of I1 and I2 (both must be of same size)
+  //         dims[1] ... height of
