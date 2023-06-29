@@ -52,4 +52,10 @@ public:
   //                     images to previous images internally. this option can be used
   //                     when small/no motions are observed to obtain Tr_delta wrt
   //                     an older coordinate system / time step than the previous one.
-  // output
+  // output: returns false if an error occured
+  bool Process (QuadFeatureMatch& quadmatches);
+
+private:
+
+  std::vector<double>  estimateMotion (std::vector<pmatch>& quadmatches);
+  //allocate the inliers and outliers of the matched feat
