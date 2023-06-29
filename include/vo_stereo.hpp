@@ -49,4 +49,7 @@ public:
   //         dims[1] ... height of I1 and I2 (both must be of same size)
   //         dims[2] ... bytes per line (often equal to width)
   //         replace ... replace current images with I1 and I2, without copying last current
-  //                     im
+  //                     images to previous images internally. this option can be used
+  //                     when small/no motions are observed to obtain Tr_delta wrt
+  //                     an older coordinate system / time step than the previous one.
+  // output
