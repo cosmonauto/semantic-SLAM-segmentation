@@ -58,4 +58,8 @@ public:
 private:
 
   std::vector<double>  estimateMotion (std::vector<pmatch>& quadmatches);
-  //allocate the inliers and outliers of the matched feat
+  //allocate the inliers and outliers of the matched feature points
+   void getInOutMatches(std::vector<pmatch>& quadmatches, vector<int>& inliers);
+
+ // given inlier and outlier the disparity for the upcoming segmentation
+   void givenMatchesDisparity(c
