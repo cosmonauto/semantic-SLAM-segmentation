@@ -65,4 +65,6 @@ private:
    void givenMatchesDisparity(cv::Mat& disparity);
 
   enum                 result { UPDATED, FAILED, CONVERGED };  
-  result               updateParameters(std::vector<pmatch>& quadmatches,vector<int> &active, vector<double> &tr,double step
+  result               updateParameters(std::vector<pmatch>& quadmatches,vector<int> &active, vector<double> &tr,double step_size,double eps);
+  void                 computeObservations(std::vector<pmatch> &quadmatches, vector<int> &active);
+  void                 computeResidualsAndJacobian(std::vector<double> &tr,std::vector<i
