@@ -62,4 +62,7 @@ private:
    void getInOutMatches(std::vector<pmatch>& quadmatches, vector<int>& inliers);
 
  // given inlier and outlier the disparity for the upcoming segmentation
-   void givenMatchesDisparity(c
+   void givenMatchesDisparity(cv::Mat& disparity);
+
+  enum                 result { UPDATED, FAILED, CONVERGED };  
+  result               updateParameters(std::vector<pmatch>& quadmatches,vector<int> &active, vector<double> &tr,double step
