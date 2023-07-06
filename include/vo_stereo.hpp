@@ -72,4 +72,9 @@ private:
   double *X,*Y,*Z;    // 3d points
   double *p_residual; // residuals (p_residual=p_observe-p_predict)
   
-  // parameter
+  // parameters
+  parameters param;
+};
+
+#endif // VO_STEREO_H
+
