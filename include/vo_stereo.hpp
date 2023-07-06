@@ -67,4 +67,9 @@ private:
   enum                 result { UPDATED, FAILED, CONVERGED };  
   result               updateParameters(std::vector<pmatch>& quadmatches,vector<int> &active, vector<double> &tr,double step_size,double eps);
   void                 computeObservations(std::vector<pmatch> &quadmatches, vector<int> &active);
-  void                 computeResidualsAndJacobian(std::vector<double> &tr,std::vector<i
+  void                 computeResidualsAndJacobian(std::vector<double> &tr,std::vector<int> &active);
+  std::vector<int> getInlier(std::vector<pmatch>& quadmatches,std::vector<double> &tr);
+  double *X,*Y,*Z;    // 3d points
+  double *p_residual; // residuals (p_residual=p_observe-p_predict)
+  
+  // parameter
