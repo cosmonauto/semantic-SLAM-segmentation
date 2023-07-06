@@ -1,2 +1,8 @@
 add_library( rgbd_tutor_lib SHARED    
-    rgbdframe.cpp parameter_reader.c
+    rgbdframe.cpp parameter_reader.cpp orb.cpp pnp.cpp track.cpp looper.cpp pose_graph.cpp 
+    mapper.cpp stereo.cpp segnet.cpp 
+    quadmatcher.cpp vo.cpp vo_stereo.cpp matrix_.cpp
+)
+
+add_library( motion_lib SHARED    
+    uvdisparity.cpp vo_stereo.cp
