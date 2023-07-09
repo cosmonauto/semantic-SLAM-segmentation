@@ -5,4 +5,11 @@ add_library( rgbd_tutor_lib SHARED
 )
 
 add_library( motion_lib SHARED    
-    uvdisparity.cpp vo_stereo.cp
+    uvdisparity.cpp vo_stereo.cpp vo.cpp quadmatcher.cpp stereo.cpp 
+)
+
+target_link_libraries( rgbd_tutor_lib
+    ${OpenCV_LIBRARIES}
+    ${CHOLMOD_LIBRARIES}
+    ${PCL_LIBRARIES}
+    ${PROJECT_SOURCE_DIR}/Thirdparty/orbslam_modified/li
