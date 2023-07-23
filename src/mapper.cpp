@@ -24,4 +24,8 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
 	        uchar* motion_ptr = moving_mask.ptr<uchar>(m);
             for ( int n=0; n<frame->depth.cols; n+=1 )
             {
-                
+                ushort d = frame->depth.ptr<ushort>(m)[n];
+                if (d == 0)
+                    continue;  //深度为0，不考虑
+                if (d > max_distance * frame->camera.scale)
+                    continue; //距离较远的点，不考
