@@ -28,4 +28,10 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                 if (d == 0)
                     continue;  //深度为0，不考虑
                 if (d > max_distance * frame->camera.scale)
-                    continue; //距离较远的点，不考
+                    continue; //距离较远的点，不考虑
+	        	if (motion_ptr[n] == 255)
+		            continue; //移动物体的点，不考虑
+
+                PointT p;
+                cv::Point3f p_cv = frame->project2dTo3d(n, m);
+                p.b = frame->semantic
