@@ -39,4 +39,7 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                 p.r = frame->semantic.ptr<uchar>(m)[n*3+2];
 
                 if (
-                        (p.b==128 && p.g==128 && p.r==1
+                        (p.b==128 && p.g==128 && p.r==128) || //sky
+                        (p.b==128 && p.g==192 && p.r==192) || // pole
+                       // (p.b==0   && p.g==69 && p.r==255)  || // Road_marking
+                       // (p.b==128 && p.g==128 &&
