@@ -49,4 +49,7 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
 
                         //(p.b==128 && p.g==0 && p.r==64)    // car
                       //(p.b==128 && p.g==64 && p.r==128) || // road
-                     
+                      //(p.b==222 && p.g==40 && p.r==60)  || // Pavement
+                      //(p.b==0   && p.g==128 && p.r==128)|| // Tree
+                      //(p.b==0   && p.g==0 && p.r==128)  || //building
+                    )
