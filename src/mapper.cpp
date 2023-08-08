@@ -42,4 +42,7 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                         (p.b==128 && p.g==128 && p.r==128) || //sky
                         (p.b==128 && p.g==192 && p.r==192) || // pole
                        // (p.b==0   && p.g==69 && p.r==255)  || // Road_marking
-                       // (p.b==128 && p.g==128 &&
+                       // (p.b==128 && p.g==128 && p.r==192) || // SignSymbol
+                       // (p.b==128 && p.g==64 && p.r==64)   || // fence
+                       // (p.b==0   && p.g==64 && p.r==64)   || // pedestrian
+                  
