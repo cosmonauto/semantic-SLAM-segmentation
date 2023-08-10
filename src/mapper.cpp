@@ -52,4 +52,12 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                       //(p.b==222 && p.g==40 && p.r==60)  || // Pavement
                       //(p.b==0   && p.g==128 && p.r==128)|| // Tree
                       //(p.b==0   && p.g==0 && p.r==128)  || //building
-                    )
+                    ) continue;
+
+                p.x = p_cv.x;
+                p.y = p_cv.y;
+                p.z = p_cv.z;
+
+                /////////////////////////////////////
+                PointT point_result;//这里是投影点的空间坐标
+     
