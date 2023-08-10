@@ -62,4 +62,10 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                 PointT point_result;//这里是投影点的空间坐标
                 point_result.b = frame->result.ptr<uchar>(m)[n*3];
                 point_result.g = frame->result.ptr<uchar>(m)[n*3+1];
-                point_result.r = frame->result.ptr<uchar>
+                point_result.r = frame->result.ptr<uchar>(m)[n*3+2];
+                point_result.x = p_cv.x;
+                point_result.y = p_cv.y;
+                point_result.z = p_cv.z;
+
+                /////////////////////////////////////
+                ////
