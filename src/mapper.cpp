@@ -86,4 +86,12 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
         }
     }
 
-    //Eigen::Isometry3d T = fra
+    //Eigen::Isometry3d T = frame->getTransform().inverse();
+    Eigen::Isometry3d T = frame->getTransform();
+    pcl::transformPointCloud( *frame->pointcloud, *tmp, T.matrix());
+    tmp->is_dense = false;
+    return tmp;
+}
+
+void Mapper::viewer()
+{
