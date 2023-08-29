@@ -79,4 +79,11 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
 
                 /////////////////////////////////////
 
-                //frame->pointcloud->poi
+                //frame->pointcloud->points.push_back( p );
+                //frame->pointcloud->points.push_back(point_result);
+                frame->pointcloud->points.push_back(point_img);
+            }
+        }
+    }
+
+    //Eigen::Isometry3d T = fra
