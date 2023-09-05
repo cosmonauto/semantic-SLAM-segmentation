@@ -95,3 +95,9 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
 
 void Mapper::viewer()
 {
+    pcl::visualization::CloudViewer viewer("viewer");
+
+    //pcl::visualization::PCLVisualizer view("map");
+    //view.setBackgroundColor(255,255,255);
+
+    PointCloud::Ptr globalMap (new PointClou
