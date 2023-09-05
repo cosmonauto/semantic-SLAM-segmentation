@@ -100,4 +100,15 @@ void Mapper::viewer()
     //pcl::visualization::PCLVisualizer view("map");
     //view.setBackgroundColor(255,255,255);
 
-    PointCloud::Ptr globalMap (new PointClou
+    PointCloud::Ptr globalMap (new PointCloud);
+
+ 
+    pcl::VoxelGrid<PointT>	voxel;
+    voxel.setLeafSize( resolution, resolution, resolution );
+
+    while (shutdownFlag == false)
+    {
+        boost::timer timer;
+
+        static int cntGlobalUpdate = 0;
+        if ( poseGra
