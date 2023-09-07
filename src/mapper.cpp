@@ -118,4 +118,9 @@ void Mapper::viewer()
         }
         // keyframe is updated
         PointCloud::Ptr	tmp(new PointCloud());
-        if (cntGlobalUpdate % 15 ==
+        if (cntGlobalUpdate % 15 == 0)
+        {
+            // update all frames
+            cout<<"redrawing frames"<<endl;
+            globalMap->clear();
+            for ( int i=0; i<poseGraph.keyframes.size(); i+=2 )
