@@ -111,4 +111,11 @@ void Mapper::viewer()
         boost::timer timer;
 
         static int cntGlobalUpdate = 0;
-        if ( poseGra
+        if ( poseGraph.keyframes.size() <= this->keyframe_size )
+        {
+            usleep(1000);
+            continue;
+        }
+        // keyframe is updated
+        PointCloud::Ptr	tmp(new PointCloud());
+        if (cntGlobalUpdate % 15 ==
