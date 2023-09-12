@@ -131,4 +131,9 @@ void Mapper::viewer()
         }
         else
         {
-            for ( int i=poseGraph.keyframes.size()-1; i
+            for ( int i=poseGraph.keyframes.size()-1; i>=0 && i>poseGraph.keyframes.size()-6; i-- )
+            {
+                PointCloud::Ptr cloud = this->generatePointCloud(poseGraph.keyframes[i]);
+/*
+                // filter
+        		PointCloud::Ptr cloud_out_filte
