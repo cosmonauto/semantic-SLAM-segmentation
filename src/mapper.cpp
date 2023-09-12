@@ -124,3 +124,11 @@ void Mapper::viewer()
             cout<<"redrawing frames"<<endl;
             globalMap->clear();
             for ( int i=0; i<poseGraph.keyframes.size(); i+=2 )
+            {
+                PointCloud::Ptr cloud = this->generatePointCloud(poseGraph.keyframes[i]);
+                *globalMap += *cloud;
+            }
+        }
+        else
+        {
+            for ( int i=poseGraph.keyframes.size()-1; i
