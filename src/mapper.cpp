@@ -154,4 +154,9 @@ void Mapper::viewer()
         voxel.setInputCloud( globalMap );
         voxel.filter( *tmp );
 
-  
+        keyframe_size = poseGraph.keyframes.size();
+        globalMap->swap( *tmp );
+        viewer.showCloud( globalMap );
+
+        cout << "points in global map: " << globalMap->points.size() << endl;
+        cout << "Mapping cost tim
