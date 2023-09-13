@@ -159,4 +159,10 @@ void Mapper::viewer()
         viewer.showCloud( globalMap );
 
         cout << "points in global map: " << globalMap->points.size() << endl;
-        cout << "Mapping cost tim
+        cout << "Mapping cost time: " << timer.elapsed() * 1000.0 << "ms" << endl;
+
+    }
+    if(poseGraph.shutDownFlag == true)
+    {
+        pcl::PCDWriter writer;
+        writer.write("/home/relaybot/Mu_Link/KittiData/18/map18_img.pcd", *(globalMap));
