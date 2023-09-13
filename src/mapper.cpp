@@ -142,4 +142,16 @@ void Mapper::viewer()
         		sor.setMeanK(30);
         		sor.setStddevMulThresh(1.0);
         		sor.filter(*cloud_out_filtered);
- 
+                *globalMap += *cloud_out_filtered;
+*/
+                *globalMap += *cloud;
+            }
+        }
+
+        cntGlobalUpdate ++ ;
+
+        //voxel
+        voxel.setInputCloud( globalMap );
+        voxel.filter( *tmp );
+
+  
