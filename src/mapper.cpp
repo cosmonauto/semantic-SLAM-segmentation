@@ -136,4 +136,10 @@ void Mapper::viewer()
                 PointCloud::Ptr cloud = this->generatePointCloud(poseGraph.keyframes[i]);
 /*
                 // filter
-        		PointCloud::Ptr cloud_out_filte
+        		PointCloud::Ptr cloud_out_filtered (new PointCloud());
+        		pcl::StatisticalOutlierRemoval<PointT> sor;
+        		sor.setInputCloud(cloud);
+        		sor.setMeanK(30);
+        		sor.setStddevMulThresh(1.0);
+        		sor.filter(*cloud_out_filtered);
+ 
