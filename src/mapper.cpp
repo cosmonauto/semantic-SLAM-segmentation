@@ -166,3 +166,12 @@ void Mapper::viewer()
     {
         pcl::PCDWriter writer;
         writer.write("/home/relaybot/Mu_Link/KittiData/18/map18_img.pcd", *(globalMap));
+        cout << "Map saved!" << endl;
+    }
+//    while (!viewer.wasStopped ())
+//    {
+//        poseGraph.shutDownFlag == true
+//    }
+//    pcl::PCDWriter writer;
+//    writer.write("map.pcd", *globalMap);
+//
