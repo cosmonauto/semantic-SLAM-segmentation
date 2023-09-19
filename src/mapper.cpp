@@ -174,4 +174,12 @@ void Mapper::viewer()
 //    }
 //    pcl::PCDWriter writer;
 //    writer.write("map.pcd", *globalMap);
-//
+//    cout << "Map saved!" << endl;
+}
+void Mapper::SaveMap()
+{
+//    if(poseGraph.shutDownFlag == true)
+//    {
+//        pcl::PCDWriter writer;
+//        writer.write("map.pcd", *(globalMap));
+//        cout << "Map
