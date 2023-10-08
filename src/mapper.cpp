@@ -182,4 +182,13 @@ void Mapper::SaveMap()
 //    {
 //        pcl::PCDWriter writer;
 //        writer.write("map.pcd", *(globalMap));
-//        cout << "Map
+//        cout << "Map saved!" << endl;
+//    }
+}
+
+void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
+{
+	moving_mask = cv::Mat::zeros(frame->semantic.size(), CV_8UC1);
+
+	// get semantic_maybe_motion mask
+	cv::Mat imgcolor = frame->seman
