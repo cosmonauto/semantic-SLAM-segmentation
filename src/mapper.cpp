@@ -191,4 +191,9 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 	moving_mask = cv::Mat::zeros(frame->semantic.size(), CV_8UC1);
 
 	// get semantic_maybe_motion mask
-	cv::Mat imgcolor = frame->seman
+	cv::Mat imgcolor = frame->semantic.clone();//语义分割图
+	cv::Mat img = cv::Mat::zeros(imgcolor.size(), CV_8UC1);
+	for (int i = 0; i < imgcolor.rows; i++)
+	{
+		uchar* imgcolor_ptr = imgcolor.ptr<uchar>(i);//语义图
+		uchar* img_ptr = img.pt
