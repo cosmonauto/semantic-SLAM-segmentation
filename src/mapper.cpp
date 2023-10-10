@@ -204,3 +204,11 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 			uchar pg = imgcolor_ptr[j*3+1];
 			uchar pr = imgcolor_ptr[j*3+2];//语义图
 			if ( //(pb==128 && pg==0 && pr==64) || //Car
+				 (pb==0 && pg==64 && pr==64) ||  //Pedestrian
+				 (pb==192 && pg==128 && pr==0) ) //Bicyclist
+			    {
+				   img_ptr[j] = 255;
+                }
+		}
+	}
+	cv::dilate(img, img, cv::Mat(3,3,CV_8UC1), cv::Po
