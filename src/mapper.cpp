@@ -196,4 +196,11 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 	for (int i = 0; i < imgcolor.rows; i++)
 	{
 		uchar* imgcolor_ptr = imgcolor.ptr<uchar>(i);//语义图
-		uchar* img_ptr = img.pt
+		uchar* img_ptr = img.ptr<uchar>(i);
+		for (int j = 0; j < imgcolor.cols; j++)
+		{
+
+			uchar pb = imgcolor_ptr[j*3];
+			uchar pg = imgcolor_ptr[j*3+1];
+			uchar pr = imgcolor_ptr[j*3+2];//语义图
+			if ( //(pb==128 && pg==0 && pr==64) || //Car
