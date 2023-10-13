@@ -220,4 +220,8 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 
 	// get semantic contours mask
 	std::vector<std::vector<cv::Point> > contours; 
-	cv:
+	cv::findContours(img, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+	cv::Mat semantic_mask(img.size(), CV_8U, cv::Scalar(0)); 
+	cv::drawContours(semantic_mask, contours, -1, cv::Scalar(255), 2); 
+
+	// get motion_semantic resu
