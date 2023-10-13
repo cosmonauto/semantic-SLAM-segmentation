@@ -211,4 +211,13 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
                 }
 		}
 	}
-	cv::dilate(img, img, cv::Mat(3,3,CV_8UC1), cv::Po
+	cv::dilate(img, img, cv::Mat(3,3,CV_8UC1), cv::Point(-1,-1), 2);//膨胀操作
+
+	moving_mask = img.clone();
+/*
+	// get motion mask
+	cv::Mat motion = frame->moving_mask.clone();
+
+	// get semantic contours mask
+	std::vector<std::vector<cv::Point> > contours; 
+	cv:
