@@ -224,4 +224,11 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 	cv::Mat semantic_mask(img.size(), CV_8U, cv::Scalar(0)); 
 	cv::drawContours(semantic_mask, contours, -1, cv::Scalar(255), 2); 
 
-	// get motion_semantic resu
+	// get motion_semantic result
+	std::vector<cv::Mat> result_masks;
+	for (int i = 0; i < contours.size(); i++)
+	{
+		cv::Mat mask = cv::Mat::zeros(img.size(), img.type());
+
+		cv::Mat tmp_mask(img.size(), CV_8U, cv::Scalar(0));
+		cv::drawContours(tmp_mask, cont
