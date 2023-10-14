@@ -231,4 +231,11 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 		cv::Mat mask = cv::Mat::zeros(img.size(), img.type());
 
 		cv::Mat tmp_mask(img.size(), CV_8U, cv::Scalar(0));
-		cv::drawContours(tmp_mask, cont
+		cv::drawContours(tmp_mask, contours, i, cv::Scalar(255,255,255), CV_FILLED, 8);
+
+		if (cv::contourArea(contours[i]) > area_thres)
+		{
+			cv::drawContours(mask, contours, i, cv::Scalar(255,255,255), CV_FILLED, 8);
+			int overlay_count = 0;
+			int mask_count = 1;
+			for
