@@ -247,3 +247,12 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 					if (mask_ptr[u] == 255) 
 					{
 						mask_count ++;
+						if (motion_ptr[u] == 255)
+						{
+							overlay_count ++;
+						}
+					}
+				}
+			}
+			double overlay_portion = overlay_count * 1.0f / mask_count;
+			//std::cout << "area_portion_" << i << ": " << overlay_p
