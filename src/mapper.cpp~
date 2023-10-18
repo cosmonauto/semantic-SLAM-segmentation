@@ -24,4 +24,10 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
 	    uchar* motion_ptr = moving_mask.ptr<uchar>(m);
             for ( int n=0; n<frame->depth.cols; n+=1 )
             {
-                ushort
+                ushort d = frame->depth.ptr<ushort>(m)[n];
+                if (d == 0)
+                    continue;
+                if (d > max_distance * frame->camera.scale)
+                    continue;
+		if (motion_ptr[n] == 255)
+		   
