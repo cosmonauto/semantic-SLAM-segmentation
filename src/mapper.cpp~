@@ -18,4 +18,10 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
     {
         // point cloud is null ptr
         frame->pointcloud = boost::make_shared<PointCloud>();
-#pragma omp parallel f
+#pragma omp parallel for
+        for ( int m=0; m<frame->depth.rows; m+=1 )
+        {
+	    uchar* motion_ptr = moving_mask.ptr<uchar>(m);
+            for ( int n=0; n<frame->depth.cols; n+=1 )
+            {
+                ushort
