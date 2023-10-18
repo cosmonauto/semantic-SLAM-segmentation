@@ -36,4 +36,9 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                 cv::Point3f p_cv = frame->project2dTo3d(n, m);
                 p.b = frame->semantic.ptr<uchar>(m)[n*3];
                 p.g = frame->semantic.ptr<uchar>(m)[n*3+1];
-            
+                p.r = frame->semantic.ptr<uchar>(m)[n*3+2];
+
+                if (
+                        (p.b==128 && p.g==128 && p.r==128) || //sky
+                        //(p.b==0 && p.g==0 && p.r==128) || //building
+                        (p.b=
