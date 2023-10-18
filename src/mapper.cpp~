@@ -30,4 +30,10 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                 if (d > max_distance * frame->camera.scale)
                     continue;
 		if (motion_ptr[n] == 255)
-		   
+		    continue;
+
+                PointT p;
+                cv::Point3f p_cv = frame->project2dTo3d(n, m);
+                p.b = frame->semantic.ptr<uchar>(m)[n*3];
+                p.g = frame->semantic.ptr<uchar>(m)[n*3+1];
+            
