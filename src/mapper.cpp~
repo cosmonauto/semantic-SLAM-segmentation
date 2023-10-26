@@ -44,4 +44,8 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                         (p.b==128 && p.g==192 && p.r==192) || // pole
                         (p.b==0 && p.g==69 && p.r==255) || // lane
                         //(p.b==128 && p.g==64 && p.r==128) || // road
-                        //(p.b==222 && p.g==40 && p.r==60
+                        //(p.b==222 && p.g==40 && p.r==60) || // sidewalk
+                        //(p.b==0 && p.g==128 && p.r==128) || // vegetable
+                        (p.b==128 && p.g==128 && p.r==192) || // sign
+                        (p.b==128 && p.g==64 && p.r==64) || // fence
+       
