@@ -67,3 +67,12 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
     pcl::transformPointCloud( *frame->pointcloud, *tmp, T.matrix());
     tmp->is_dense = false;
     return tmp;
+}
+
+void Mapper::viewer()
+{
+    pcl::visualization::CloudViewer viewer("viewer");
+    PointCloud::Ptr globalMap (new PointCloud);
+ 
+    pcl::VoxelGrid<PointT>	voxel;
+    voxel.setLeafSize( resolution, r
