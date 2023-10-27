@@ -51,4 +51,15 @@ Mapper::PointCloud::Ptr Mapper::generatePointCloud( const RGBDFrame::Ptr &frame 
                         //(p.b==128 && p.g==0 && p.r==64) // car
                         (p.b==0 && p.g==64 && p.r==64) || // pedestrian
                         (p.b==192 && p.g==128 && p.r==0) //cyclist
-              
+                    ) continue;
+
+                p.x = p_cv.x;
+                p.y = p_cv.y;
+                p.z = p_cv.z;
+
+                frame->pointcloud->points.push_back( p );
+            }
+        }
+    }
+
+    //Eigen::Iso
