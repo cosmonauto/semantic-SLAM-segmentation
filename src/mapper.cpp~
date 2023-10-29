@@ -75,4 +75,13 @@ void Mapper::viewer()
     PointCloud::Ptr globalMap (new PointCloud);
  
     pcl::VoxelGrid<PointT>	voxel;
-    voxel.setLeafSize( resolution, r
+    voxel.setLeafSize( resolution, resolution, resolution );
+
+    while (shutdownFlag == false)
+    {
+        boost::timer timer;
+
+        static int cntGlobalUpdate = 0;
+        if ( poseGraph.keyframes.size() <= this->keyframe_size )
+        {
+            usleep(1000);
