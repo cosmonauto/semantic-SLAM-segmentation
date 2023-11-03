@@ -85,3 +85,11 @@ void Mapper::viewer()
         if ( poseGraph.keyframes.size() <= this->keyframe_size )
         {
             usleep(1000);
+            continue;
+        }
+        // keyframe is updated
+        PointCloud::Ptr	tmp(new PointCloud());
+        if (cntGlobalUpdate % 15 == 0)
+        {
+            // update all frames
+            cout<<"r
