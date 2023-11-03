@@ -92,4 +92,9 @@ void Mapper::viewer()
         if (cntGlobalUpdate % 15 == 0)
         {
             // update all frames
-            cout<<"r
+            cout<<"redrawing frames"<<endl;
+            globalMap->clear();
+            for ( int i=0; i<poseGraph.keyframes.size(); i+=2 )
+            {
+                PointCloud::Ptr cloud = this->generatePointCloud(poseGraph.keyframes[i]);
+   
