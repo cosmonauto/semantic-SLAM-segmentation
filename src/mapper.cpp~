@@ -119,4 +119,12 @@ void Mapper::viewer()
             }
         }
 
-        cntGl
+        cntGlobalUpdate ++ ;
+
+        //voxel
+        voxel.setInputCloud( globalMap );
+        voxel.filter( *tmp );
+
+        keyframe_size = poseGraph.keyframes.size();
+        globalMap->swap( *tmp );
+        viewer.showCloud( global
