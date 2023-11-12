@@ -127,4 +127,14 @@ void Mapper::viewer()
 
         keyframe_size = poseGraph.keyframes.size();
         globalMap->swap( *tmp );
-        viewer.showCloud( global
+        viewer.showCloud( globalMap );
+
+        cout << "points in global map: " << globalMap->points.size() << endl;
+        cout << "Mapping cost time: " << timer.elapsed() * 1000.0 << "ms" << endl;
+
+    }
+    
+    while (!viewer.wasStopped ())
+    {
+    }
+    pcl::PCDWrit
