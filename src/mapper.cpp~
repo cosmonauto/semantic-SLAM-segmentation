@@ -137,4 +137,12 @@ void Mapper::viewer()
     while (!viewer.wasStopped ())
     {
     }
-    pcl::PCDWrit
+    pcl::PCDWriter writer;  
+    writer.write("map.pcd", *globalMap); 
+    cout << "Map saved!" << endl;
+}
+
+
+void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
+{
+	moving_mask = cv::Mat::zeros(frame->semantic.size(), CV_8UC1
