@@ -193,4 +193,12 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 		if (cv::contourArea(contours[i]) > area_thres)
 		{
 			cv::drawContours(mask, contours, i, cv::Scalar(255,255,255), CV_FILLED, 8);
-			int ov
+			int overlay_count = 0;
+			int mask_count = 1;
+			for (int v = 0; v < img.rows; v++)
+			{
+				uchar* motion_ptr = motion.ptr<uchar>(v);
+				uchar* mask_ptr = mask.ptr<uchar>(v);
+				for (int u = 0; u < img.cols; u++)
+				{
+					if (mask
