@@ -223,4 +223,7 @@ void Mapper::semantic_motion_fuse(const RGBDFrame::Ptr &frame)
 	if (result_masks.size() <= 0) 
 		return;
 	
-	for (int i = 0; i < r
+	for (int i = 0; i < result_masks.size(); i++)
+		moving_mask += result_masks[i];
+*/
+}
