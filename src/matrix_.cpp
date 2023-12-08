@@ -546,3 +546,195 @@ bool Matrix_::lu(int32_t *idx, FLOAT &d, FLOAT eps) {
       val[i][j] = sum;
       if ( (dum=vv[i]*fabs(sum))>=big) {
         big  = dum;
+        imax = i;
+      }
+    }
+    if (j!=imax) { // Do we need to interchange rows?
+      for (k=0; k<n; k++) { // Yes, do so...
+        dum          = val[imax][k];
+        val[imax][k] = val[j][k];
+        val[j][k]    = dum;
+      }
+      d = -d;     // ...and change the parity of d.
+      vv[imax]=vv[j]; // Also interchange the scale factor.
+    }
+    idx[j] = imax;
+    if (j!=n-1) { // Now, finally, divide by the pivot element.
+      dum = 1.0/val[j][j];
+      for (i=j+1; i<n; i++)
+        val[i][j] *= dum;
+    }
+  } // Go back for the next column in the reduction.
+  
+  // success
+  free(vv);
+  return true;
+}
+
+// Given a Matrix_ M/A[1..m][1..n], this routine computes its singular value decomposition, M/A =
+// U·W·V T. Thematrix U replaces a on output. The diagonal Matrix_ of singular values W is output
+// as a vector w[1..n]. Thematrix V (not the transpose V T ) is output as v[1..n][1..n].
+void Matrix_::svd(Matrix_ &U2,Matrix_ &W,Matrix_ &V) {
+
+  Matrix_ U = Matrix_(*this);
+  U2 = Matrix_(m,m);
+  V  = Matrix_(n,n);
+
+  FLOAT* w   = (FLOAT*)malloc(n*sizeof(FLOAT));
+  FLOAT* rv1 = (FLOAT*)malloc(n*sizeof(FLOAT));
+
+  int32_t flag,i,its,j,jj,k,l,nm;
+  FLOAT   anorm,c,f,g,h,s,scale,x,y,z;
+
+  g = scale = anorm = 0.0; // Householder reduction to bidiagonal form.
+  for (i=0;i<n;i++) {
+    l = i+1;
+    rv1[i] = scale*g;
+    g = s = scale = 0.0;
+    if (i < m) {
+      for (k=i;k<m;k++) scale += fabs(U.val[k][i]);
+      if (scale) {
+        for (k=i;k<m;k++) {
+          U.val[k][i] /= scale;
+          s += U.val[k][i]*U.val[k][i];
+        }
+        f = U.val[i][i];
+        g = -SIGN(sqrt(s),f);
+        h = f*g-s;
+        U.val[i][i] = f-g;
+        for (j=l;j<n;j++) {
+          for (s=0.0,k=i;k<m;k++) s += U.val[k][i]*U.val[k][j];
+          f = s/h;
+          for (k=i;k<m;k++) U.val[k][j] += f*U.val[k][i];
+        }
+        for (k=i;k<m;k++) U.val[k][i] *= scale;
+      }
+    }
+    w[i] = scale*g;
+    g = s = scale = 0.0;
+    if (i<m && i!=n-1) {
+      for (k=l;k<n;k++) scale += fabs(U.val[i][k]);
+      if (scale) {
+        for (k=l;k<n;k++) {
+          U.val[i][k] /= scale;
+          s += U.val[i][k]*U.val[i][k];
+        }
+        f = U.val[i][l];
+        g = -SIGN(sqrt(s),f);
+        h = f*g-s;
+        U.val[i][l] = f-g;
+        for (k=l;k<n;k++) rv1[k] = U.val[i][k]/h;
+        for (j=l;j<m;j++) {
+          for (s=0.0,k=l;k<n;k++) s += U.val[j][k]*U.val[i][k];
+          for (k=l;k<n;k++) U.val[j][k] += s*rv1[k];
+        }
+        for (k=l;k<n;k++) U.val[i][k] *= scale;
+      }
+    }
+    anorm = FMAX(anorm,(fabs(w[i])+fabs(rv1[i])));
+  }
+  for (i=n-1;i>=0;i--) { // Accumulation of right-hand transformations.
+    if (i<n-1) {
+      if (g) {
+        for (j=l;j<n;j++) // Double division to avoid possible underflow.
+          V.val[j][i]=(U.val[i][j]/U.val[i][l])/g;
+        for (j=l;j<n;j++) {
+          for (s=0.0,k=l;k<n;k++) s += U.val[i][k]*V.val[k][j];
+          for (k=l;k<n;k++) V.val[k][j] += s*V.val[k][i];
+        }
+      }
+      for (j=l;j<n;j++) V.val[i][j] = V.val[j][i] = 0.0;
+    }
+    V.val[i][i] = 1.0;
+    g = rv1[i];
+    l = i;
+  }
+  for (i=IMIN(m,n)-1;i>=0;i--) { // Accumulation of left-hand transformations.
+    l = i+1;
+    g = w[i];
+    for (j=l;j<n;j++) U.val[i][j] = 0.0;
+    if (g) {
+      g = 1.0/g;
+      for (j=l;j<n;j++) {
+        for (s=0.0,k=l;k<m;k++) s += U.val[k][i]*U.val[k][j];
+        f = (s/U.val[i][i])*g;
+        for (k=i;k<m;k++) U.val[k][j] += f*U.val[k][i];
+      }
+      for (j=i;j<m;j++) U.val[j][i] *= g;
+    } else for (j=i;j<m;j++) U.val[j][i]=0.0;
+    ++U.val[i][i];
+  }
+  for (k=n-1;k>=0;k--) { // Diagonalization of the bidiagonal form: Loop over singular values,
+    for (its=0;its<30;its++) { // and over allowed iterations.
+      flag = 1;
+      for (l=k;l>=0;l--) { // Test for splitting.
+        nm = l-1;
+        if ((FLOAT)(fabs(rv1[l])+anorm) == anorm) { flag = 0; break; }
+        if ((FLOAT)(fabs( w[nm])+anorm) == anorm) { break; }
+      }
+      if (flag) {
+        c = 0.0; // Cancellation of rv1[l], if l > 1.
+        s = 1.0;
+        for (i=l;i<=k;i++) {
+          f = s*rv1[i];
+          rv1[i] = c*rv1[i];
+          if ((FLOAT)(fabs(f)+anorm) == anorm) break;
+          g = w[i];
+          h = pythag(f,g);
+          w[i] = h;
+          h = 1.0/h;
+          c = g*h;
+          s = -f*h;
+          for (j=0;j<m;j++) {
+            y = U.val[j][nm];
+            z = U.val[j][i];
+            U.val[j][nm] = y*c+z*s;
+            U.val[j][i]  = z*c-y*s;
+          }
+        }
+      }
+      z = w[k];
+      if (l==k) { // Convergence.
+        if (z<0.0) { // Singular value is made nonnegative.
+          w[k] = -z;
+          for (j=0;j<n;j++) V.val[j][k] = -V.val[j][k];
+        }
+        break;
+      }
+      if (its == 29)
+        cerr << "ERROR in SVD: No convergence in 30 iterations" << endl;
+      x = w[l]; // Shift from bottom 2-by-2 minor.
+      nm = k-1;
+      y = w[nm];
+      g = rv1[nm];
+      h = rv1[k];
+      f = ((y-z)*(y+z)+(g-h)*(g+h))/(2.0*h*y);
+      g = pythag(f,1.0);
+      f = ((x-z)*(x+z)+h*((y/(f+SIGN(g,f)))-h))/x;
+      c = s = 1.0; // Next QR transformation:
+      for (j=l;j<=nm;j++) {
+        i = j+1;
+        g = rv1[i];
+        y = w[i];
+        h = s*g;
+        g = c*g;
+        z = pythag(f,h);
+        rv1[j] = z;
+        c = f/z;
+        s = h/z;
+        f = x*c+g*s;
+        g = g*c-x*s;
+        h = y*s;
+        y *= c;
+        for (jj=0;jj<n;jj++) {
+          x = V.val[jj][j];
+          z = V.val[jj][i];
+          V.val[jj][j] = x*c+z*s;
+          V.val[jj][i] = z*c-x*s;
+        }
+        z = pythag(f,h);
+        w[j] = z; // Rotation can be arbitrary if z = 0.
+        if (z) {
+          z = 1.0/z;
+          c = f*z;
+          s = h*z;
