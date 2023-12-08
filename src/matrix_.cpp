@@ -133,3 +133,201 @@ void Matrix_::setDiag(FLOAT s,int32_t i1,int32_t i2) {
 
 void Matrix_::zero() {
   setVal(0);
+}
+
+Matrix_ Matrix_::extractCols (vector<int> idx) {
+  Matrix_ M(m,idx.size());
+  for (int32_t j=0; j<M.n; j++)
+    if (idx[j]<n)
+      for (int32_t i=0; i<m; i++)
+        M.val[i][j] = val[i][idx[j]];
+  return M;
+}
+
+Matrix_ Matrix_::eye (const int32_t m) {
+  Matrix_ M(m,m);
+  for (int32_t i=0; i<m; i++)
+    M.val[i][i] = 1;
+  return M;
+}
+
+void Matrix_::eye () {
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      val[i][j] = 0;
+  for (int32_t i=0; i<min(m,n); i++)
+    val[i][i] = 1;
+}
+
+Matrix_ Matrix_::diag (const Matrix_ &M) {
+  if (M.m>1 && M.n==1) {
+    Matrix_ D(M.m,M.m);
+    for (int32_t i=0; i<M.m; i++)
+      D.val[i][i] = M.val[i][0];
+    return D;
+  } else if (M.m==1 && M.n>1) {
+    Matrix_ D(M.n,M.n);
+    for (int32_t i=0; i<M.n; i++)
+      D.val[i][i] = M.val[0][i];
+    return D;
+  }
+  cout << "ERROR: Trying to create diagonal Matrix_ from vector of size (" << M.m << "x" << M.n << ")" << endl;
+  exit(0);
+}
+
+Matrix_ Matrix_::reshape(const Matrix_ &M,int32_t m_,int32_t n_) {
+  if (M.m*M.n != m_*n_) {
+    cerr << "ERROR: Trying to reshape a Matrix_ of size (" << M.m << "x" << M.n <<
+            ") to size (" << m_ << "x" << n_ << ")" << endl;
+    exit(0);
+  }
+  Matrix_ M2(m_,n_);
+  for (int32_t k=0; k<m_*n_; k++) {
+    int32_t i1 = k/M.n;
+    int32_t j1 = k%M.n;
+    int32_t i2 = k/n_;
+    int32_t j2 = k%n_;
+    M2.val[i2][j2] = M.val[i1][j1];
+  }
+  return M2;
+}
+
+Matrix_ Matrix_::rotMatX (const FLOAT &angle) {
+  FLOAT s = sin(angle);
+  FLOAT c = cos(angle);
+  Matrix_ R(3,3);
+  R.val[0][0] = +1;
+  R.val[1][1] = +c;
+  R.val[1][2] = -s;
+  R.val[2][1] = +s;
+  R.val[2][2] = +c;
+  return R;
+}
+
+Matrix_ Matrix_::rotMatY (const FLOAT &angle) {
+  FLOAT s = sin(angle);
+  FLOAT c = cos(angle);
+  Matrix_ R(3,3);
+  R.val[0][0] = +c;
+  R.val[0][2] = +s;
+  R.val[1][1] = +1;
+  R.val[2][0] = -s;
+  R.val[2][2] = +c;
+  return R;
+}
+
+Matrix_ Matrix_::rotMatZ (const FLOAT &angle) {
+  FLOAT s = sin(angle);
+  FLOAT c = cos(angle);
+  Matrix_ R(3,3);
+  R.val[0][0] = +c;
+  R.val[0][1] = -s;
+  R.val[1][0] = +s;
+  R.val[1][1] = +c;
+  R.val[2][2] = +1;
+  return R;
+}
+
+Matrix_ Matrix_::operator+ (const Matrix_ &M) {
+  const Matrix_ &A = *this;
+  const Matrix_ &B = M;
+  if (A.m!=B.m || A.n!=B.n) {
+    cerr << "ERROR: Trying to add matrices of size (" << A.m << "x" << A.n <<
+        ") and (" << B.m << "x" << B.n << ")" << endl;
+    exit(0);
+  }
+  Matrix_ C(A.m,A.n);
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      C.val[i][j] = A.val[i][j]+B.val[i][j];
+  return C;
+}
+
+Matrix_ Matrix_::operator- (const Matrix_ &M) {
+  const Matrix_ &A = *this;
+  const Matrix_ &B = M;
+  if (A.m!=B.m || A.n!=B.n) {
+    cerr << "ERROR: Trying to subtract matrices of size (" << A.m << "x" << A.n <<
+        ") and (" << B.m << "x" << B.n << ")" << endl;
+    exit(0);
+  }
+  Matrix_ C(A.m,A.n);
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      C.val[i][j] = A.val[i][j]-B.val[i][j];
+  return C;
+}
+
+Matrix_ Matrix_::operator* (const Matrix_ &M) {
+  const Matrix_ &A = *this;
+  const Matrix_ &B = M;
+  if (A.n!=B.m) {
+    cerr << "ERROR: Trying to multiply matrices of size (" << A.m << "x" << A.n <<
+        ") and (" << B.m << "x" << B.n << ")" << endl;
+    exit(0);
+  }
+  Matrix_ C(A.m,B.n);
+  for (int32_t i=0; i<A.m; i++)
+    for (int32_t j=0; j<B.n; j++)
+      for (int32_t k=0; k<A.n; k++)
+        C.val[i][j] += A.val[i][k]*B.val[k][j];
+  return C;
+}
+
+Matrix_ Matrix_::operator* (const FLOAT &s) {
+  Matrix_ C(m,n);
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      C.val[i][j] = val[i][j]*s;
+  return C;
+}
+
+Matrix_ Matrix_::operator/ (const Matrix_ &M) {
+  const Matrix_ &A = *this;
+  const Matrix_ &B = M;
+  
+  if (A.m==B.m && A.n==B.n) {
+    Matrix_ C(A.m,A.n);
+    for (int32_t i=0; i<A.m; i++)
+      for (int32_t j=0; j<A.n; j++)
+        if (B.val[i][j]!=0)
+          C.val[i][j] = A.val[i][j]/B.val[i][j];
+    return C;
+    
+  } else if (A.m==B.m && B.n==1) {
+    Matrix_ C(A.m,A.n);
+    for (int32_t i=0; i<A.m; i++)
+      for (int32_t j=0; j<A.n; j++)
+        if (B.val[i][0]!=0)
+          C.val[i][j] = A.val[i][j]/B.val[i][0];
+    return C;
+    
+  } else if (A.n==B.n && B.m==1) {
+    Matrix_ C(A.m,A.n);
+    for (int32_t i=0; i<A.m; i++)
+      for (int32_t j=0; j<A.n; j++)
+        if (B.val[0][j]!=0)
+          C.val[i][j] = A.val[i][j]/B.val[0][j];
+    return C;
+    
+  } else {
+    cerr << "ERROR: Trying to divide matrices of size (" << A.m << "x" << A.n <<
+        ") and (" << B.m << "x" << B.n << ")" << endl;
+    exit(0);
+  } 
+}
+
+Matrix_ Matrix_::operator/ (const FLOAT &s) {
+  if (fabs(s)<1e-20) {
+    cerr << "ERROR: Trying to divide by zero!" << endl;
+    exit(0);
+  }
+  Matrix_ C(m,n);
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      C.val[i][j] = val[i][j]/s;
+  return C;
+}
+
+Matrix_ Matrix_::operator- () {
+  Matrix_ C(m,n);
