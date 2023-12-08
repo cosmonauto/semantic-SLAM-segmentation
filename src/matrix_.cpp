@@ -331,3 +331,218 @@ Matrix_ Matrix_::operator/ (const FLOAT &s) {
 
 Matrix_ Matrix_::operator- () {
   Matrix_ C(m,n);
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      C.val[i][j] = -val[i][j];
+  return C;
+}
+
+Matrix_ Matrix_::operator~ () {
+  Matrix_ C(n,m);
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      C.val[j][i] = val[i][j];
+  return C;
+}
+
+FLOAT Matrix_::l2norm () {
+  FLOAT norm = 0;
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      norm += val[i][j]*val[i][j];
+  return sqrt(norm);
+}
+
+FLOAT Matrix_::mean () {
+  FLOAT mean = 0;
+  for (int32_t i=0; i<m; i++)
+    for (int32_t j=0; j<n; j++)
+      mean += val[i][j];
+  return mean/(FLOAT)(m*n);
+}
+
+Matrix_ Matrix_::cross (const Matrix_ &a, const Matrix_ &b) {
+  if (a.m!=3 || a.n!=1 || b.m!=3 || b.n!=1) {
+    cerr << "ERROR: Cross product vectors must be of size (3x1)" << endl;
+    exit(0);
+  }
+  Matrix_ c(3,1);
+  c.val[0][0] = a.val[1][0]*b.val[2][0]-a.val[2][0]*b.val[1][0];
+  c.val[1][0] = a.val[2][0]*b.val[0][0]-a.val[0][0]*b.val[2][0];
+  c.val[2][0] = a.val[0][0]*b.val[1][0]-a.val[1][0]*b.val[0][0];
+  return c;
+}
+
+Matrix_ Matrix_::inv (const Matrix_ &M) {
+  if (M.m!=M.n) {
+    cerr << "ERROR: Trying to invert Matrix_ of size (" << M.m << "x" << M.n << ")" << endl;
+    exit(0);
+  }
+  Matrix_ A(M);
+  Matrix_ B = eye(M.m);
+  B.solve(A);
+  return B;
+}
+
+bool Matrix_::inv () {
+  if (m!=n) {
+    cerr << "ERROR: Trying to invert Matrix_ of size (" << m << "x" << n << ")" << endl;
+    exit(0);
+  }
+  Matrix_ A(*this);
+  eye();
+  solve(A);
+  return true;
+}
+
+FLOAT Matrix_::det () {
+  
+  if (m != n) {
+    cerr << "ERROR: Trying to compute determinant of a Matrix_ of size (" << m << "x" << n << ")" << endl;
+    exit(0);
+  }
+    
+  Matrix_ A(*this);
+  int32_t *idx = (int32_t*)malloc(m*sizeof(int32_t));
+  FLOAT d = 1;
+  A.lu(idx,d);
+  for( int32_t i=0; i<m; i++)
+    d *= A.val[i][i];
+  free(idx);
+  return d;
+}
+
+bool Matrix_::solve (const Matrix_ &M, FLOAT eps) {
+  
+  // substitutes
+  const Matrix_ &A = M;
+  Matrix_ &B       = *this;
+  
+  if (A.m != A.n || A.m != B.m || A.m<1 || B.n<1) {
+    cerr << "ERROR: Trying to eliminate matrices of size (" << A.m << "x" << A.n <<
+            ") and (" << B.m << "x" << B.n << ")" << endl;
+    exit(0);
+  }
+  
+  // index vectors for bookkeeping on the pivoting
+  int32_t* indxc = new int32_t[m];
+  int32_t* indxr = new int32_t[m];
+  int32_t* ipiv  = new int32_t[m];
+  
+  // loop variables
+  int32_t i, icol, irow, j, k, l, ll;
+  FLOAT big, dum, pivinv, temp;
+  
+  // initialize pivots to zero
+  for (j=0;j<m;j++) ipiv[j]=0;
+  
+  // main loop over the columns to be reduced
+  for (i=0;i<m;i++) {
+    
+    big=0.0;
+    
+    // search for a pivot element
+    for (j=0;j<m;j++)
+      if (ipiv[j]!=1)
+        for (k=0;k<m;k++)
+          if (ipiv[k]==0)
+            if (fabs(A.val[j][k])>=big) {
+      big=fabs(A.val[j][k]);
+      irow=j;
+      icol=k;
+            }
+    ++(ipiv[icol]);
+    
+    // We now have the pivot element, so we interchange rows, if needed, to put the pivot
+    // element on the diagonal. The columns are not physically interchanged, only relabeled.
+    if (irow != icol) {
+      for (l=0;l<m;l++) SWAP(A.val[irow][l], A.val[icol][l])
+      for (l=0;l<n;l++) SWAP(B.val[irow][l], B.val[icol][l])
+    }
+    
+    indxr[i]=irow; // We are now ready to divide the pivot row by the
+    indxc[i]=icol; // pivot element, located at irow and icol.
+    
+    // check for singularity
+    if (fabs(A.val[icol][icol]) < eps) {
+      delete[] indxc;
+      delete[] indxr;
+      delete[] ipiv;
+      return false;
+    }
+    
+    pivinv=1.0/A.val[icol][icol];
+    A.val[icol][icol]=1.0;
+    for (l=0;l<m;l++) A.val[icol][l] *= pivinv;
+    for (l=0;l<n;l++) B.val[icol][l] *= pivinv;
+    
+    // Next, we reduce the rows except for the pivot one
+    for (ll=0;ll<m;ll++)
+      if (ll!=icol) {
+      dum = A.val[ll][icol];
+      A.val[ll][icol] = 0.0;
+      for (l=0;l<m;l++) A.val[ll][l] -= A.val[icol][l]*dum;
+      for (l=0;l<n;l++) B.val[ll][l] -= B.val[icol][l]*dum;
+      }
+  }
+  
+  // This is the end of the main loop over columns of the reduction. It only remains to unscramble
+  // the solution in view of the column interchanges. We do this by interchanging pairs of
+  // columns in the reverse order that the permutation was built up.
+  for (l=m-1;l>=0;l--) {
+    if (indxr[l]!=indxc[l])
+      for (k=0;k<m;k++)
+        SWAP(A.val[k][indxr[l]], A.val[k][indxc[l]])
+  }
+  
+  // success
+  delete[] indxc;
+  delete[] indxr;
+  delete[] ipiv;
+  return true;
+}
+
+// Given a Matrix_ a[1..n][1..n], this routine replaces it by the LU decomposition of a rowwise
+// permutation of itself. a and n are input. a is output, arranged as in equation (2.3.14) above;
+// indx[1..n] is an output vector that records the row permutation effected by the partial
+// pivoting; d is output as ±1 depending on whether the number of row interchanges was even
+// or odd, respectively. This routine is used in combination with lubksb to solve linear equations
+// or invert a Matrix_.
+
+bool Matrix_::lu(int32_t *idx, FLOAT &d, FLOAT eps) {
+  
+  if (m != n) {
+    cerr << "ERROR: Trying to LU decompose a Matrix_ of size (" << m << "x" << n << ")" << endl;
+    exit(0);
+  }
+  
+  int32_t i,imax,j,k;
+  FLOAT   big,dum,sum,temp;
+  FLOAT* vv = (FLOAT*)malloc(n*sizeof(FLOAT)); // vv stores the implicit scaling of each row.
+  d = 1.0;
+  for (i=0; i<n; i++) { // Loop over rows to get the implicit scaling information.
+    big = 0.0;
+    for (j=0; j<n; j++)
+      if ((temp=fabs(val[i][j]))>big)
+        big = temp;
+    if (big == 0.0) { // No nonzero largest element.
+      free(vv);
+      return false;
+    }
+    vv[i] = 1.0/big; // Save the scaling.
+  }
+  for (j=0; j<n; j++) { // This is the loop over columns of Crout’s method.
+    for (i=0; i<j; i++) { // This is equation (2.3.12) except for i = j.
+      sum = val[i][j];
+      for (k=0; k<i; k++)
+        sum -= val[i][k]*val[k][j];
+      val[i][j] = sum;
+    }
+    big = 0.0; // Initialize the search for largest pivot element.
+    for (i=j; i<n; i++) {
+      sum = val[i][j];
+      for (k=0; k<j; k++)
+        sum -= val[i][k]*val[k][j];
+      val[i][j] = sum;
+      if ( (dum=vv[i]*fabs(sum))>=big) {
+        big  = dum;
