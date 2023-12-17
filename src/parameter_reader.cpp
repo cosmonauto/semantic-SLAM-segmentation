@@ -13,4 +13,7 @@ rgbd_tutor::CAMERA_INTRINSIC_PARAMETERS rgbd_tutor::ParameterReader::getCamera()
     camera.d2 = this->getData<double>("camera.d2");
     camera.d3 = this->getData<double>("camera.d3");
     camera.d4 = this->getData<double>("camera.d4");
-    camera.scale = this->getData<double>("came
+    camera.scale = this->getData<double>("camera.scale");
+
+    return camera;
+}
