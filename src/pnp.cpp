@@ -174,3 +174,54 @@ bool rgbd_tutor::PnPSolver::solvePnPLazy( const rgbd_tutor::RGBDFrame::Ptr & fra
 	double camera_matrix_data[3][3] = {
 		{frame1->camera.fx, 0, frame1->camera.cx},
 		{0, frame1->camera.fy, frame1->camera.cy},
+		{0, 0, 1}
+	};
+
+	cout << "Solving pnp..." << endl;
+	cv::Mat cameraMatrix( 3, 3, CV_64F, camera_matrix_data );
+	cv::Mat rvec, tvec, inliers;
+
+	bool b = true;
+	cv::solvePnPRansac(obj, img, cameraMatrix, cv::Mat(), rvec, tvec, false, 100, 1.0, 100, inliers);
+
+	cv::Mat R;
+	cv::Rodrigues( rvec, R );
+	Eigen::Matrix3d r;
+	cv::cv2eigen( R, r );
+
+	Eigen::Isometry3d T = Eigen::Isometry3d::Identity();
+
+	Eigen::AngleAxisd angle( r );
+	Eigen::Translation<double,3> trans( tvec.at<double>(0,0), tvec.at<double>(0,1), tvec.at<double>(0,2) );
+
+	T = angle;
+	T(0,3) = tvec.at<double>(0,0);
+	T(1,3) = tvec.at<double>(0,1);
+	T(2,3) = tvec.at<double>(0,2);
+
+        pnp_information.numFeatureMatches = img.size();
+        pnp_information.numInliers = inliers.rows;
+        pnp_information.T = T;
+	*/
+
+
+    if (drawMatches == true && b==true)
+    {
+        vector<cv::DMatch> inlierMatches;
+        for ( int index:inliersIndex )
+            inlierMatches.push_back( validMatches[index] );
+        cv::Mat out;
+        cv::drawMatches(frame1->rgb, frame1->getAllKeypoints(),
+                        frame2->rgb, frame2->getAllKeypoints(),
+                        inlierMatches, out);
+        cv::imshow( "inlier matches", out );
+	//cv::waitKey(0);
+    }
+
+    if ( pnp_information.numInliers < min_inliers )
+    {
+        return false;
+    }
+    return true;
+
+}
