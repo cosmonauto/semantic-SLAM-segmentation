@@ -18,4 +18,12 @@ bool PoseGraph::tryInsertKeyFrame(RGBDFrame::Ptr& frame)
         refFrame = frame;
         g2o::VertexSE3* v = new g2o::VertexSE3();
         v->setId( frame->id );
-        v-
+        v->setEstimate( frame->T_f_w );
+        v->setFixed(true);
+        optimizer.addVertex( v );
+        vertexIdx.push_back( frame->id );
+        return true;
+    }
+
+    // 计算 frame 和 refFrame 之间的位移差
+    Eigen::Isometry3d
