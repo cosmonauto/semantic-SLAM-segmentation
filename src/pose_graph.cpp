@@ -46,4 +46,8 @@ bool PoseGraph::tryInsertKeyFrame(RGBDFrame::Ptr& frame)
         keyframes.push_back( frame );
 
         // and the edge with refframe
-        // 这里直接根据refFrame和currentFrame的位姿差生成
+        // 这里直接根据refFrame和currentFrame的位姿差生成一个边
+        // 因为位姿差是tracker估计出来的，我们认为这是比较准的
+        g2o::EdgeSE3* edge = new g2o::EdgeSE3();
+        // 注意边的赋值有些绕，详见EdgeSE3的误差计算方式
+        g2o::VertexSE3* v0 = dynamic_cast<g2o::VertexSE3*> (optimizer.vertex( refFrame->id ));
