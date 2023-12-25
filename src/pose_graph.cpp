@@ -39,4 +39,11 @@ bool PoseGraph::tryInsertKeyFrame(RGBDFrame::Ptr& frame)
         //  add the vertex
         g2o::VertexSE3* v = new g2o::VertexSE3();
         v->setId( frame->id );
-        v->setEstimate( frame->getTransf
+        v->setEstimate( frame->getTransform() );
+        v->setFixed(false);
+        optimizer.addVertex( v );
+        vertexIdx.push_back( frame->id );
+        keyframes.push_back( frame );
+
+        // and the edge with refframe
+        // 这里直接根据refFrame和currentFrame的位姿差生成
