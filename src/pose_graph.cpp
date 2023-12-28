@@ -60,4 +60,13 @@ bool PoseGraph::tryInsertKeyFrame(RGBDFrame::Ptr& frame)
         edge->setRobustKernel( new g2o::RobustKernelHuber() );
 
         EdgeID id;
-        id[ref
+        id[refFrame->id] = frame->id;
+        edges[ id ] = edge;
+        optimizer.addEdge( edge );
+        
+        // set ref frame to current
+        refFrame = frame;
+
+        keyframe_updated.notify_one();
+        return true;
+    }
