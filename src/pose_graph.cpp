@@ -55,4 +55,9 @@ bool PoseGraph::tryInsertKeyFrame(RGBDFrame::Ptr& frame)
         edge->setVertex(0, v1);
         edge->setVertex(1, v0);
         // because the state is estimated from tracker
-      
+        edge->setMeasurementFromState();
+        edge->setInformation( Eigen::Matrix<double,6,6>::Identity() * 100);
+        edge->setRobustKernel( new g2o::RobustKernelHuber() );
+
+        EdgeID id;
+        id[ref
