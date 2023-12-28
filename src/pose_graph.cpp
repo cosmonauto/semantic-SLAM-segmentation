@@ -51,3 +51,8 @@ bool PoseGraph::tryInsertKeyFrame(RGBDFrame::Ptr& frame)
         g2o::EdgeSE3* edge = new g2o::EdgeSE3();
         // 注意边的赋值有些绕，详见EdgeSE3的误差计算方式
         g2o::VertexSE3* v0 = dynamic_cast<g2o::VertexSE3*> (optimizer.vertex( refFrame->id ));
+        g2o::VertexSE3* v1 = dynamic_cast<g2o::VertexSE3*> (optimizer.vertex( frame->id ));
+        edge->setVertex(0, v1);
+        edge->setVertex(1, v0);
+        // because the state is estimated from tracker
+      
