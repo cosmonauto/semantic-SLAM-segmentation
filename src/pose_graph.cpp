@@ -82,4 +82,12 @@ bool PoseGraph::tryInsertKeyFrame(RGBDFrame::Ptr& frame)
 void PoseGraph::mainLoop()
 {
     cout<<"starting pose graph thread..."<<endl;
-    double  loopAccumulatedError = 0.0; //回环的
+    double  loopAccumulatedError = 0.0; //回环的累积误差
+    double  localAccumulatedError = 0.0; //回环的累积误差
+    while(1)
+    {
+        if (shutDownFlag == true)
+        {
+            break;
+        }
+        unique_lock<mutex> lck_update_keyframe(keyf
