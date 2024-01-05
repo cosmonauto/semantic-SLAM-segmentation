@@ -108,4 +108,12 @@ void PoseGraph::mainLoop()
         for ( auto nf : newFrames_copy )
         {
             // 检测nf和keyframes末尾几个的关系
-            // 请注意 事实上neframes里的东西已经出现在keyframes里边
+            // 请注意 事实上neframes里的东西已经出现在keyframes里边了
+            for ( int i=0; i<nearbyFrames; i++ )
+            {
+                int idx = keyframes.size()-i-2;
+                if (idx < 0)
+                {
+                    break;
+                }
+          
