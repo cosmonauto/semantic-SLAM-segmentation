@@ -103,4 +103,9 @@ void PoseGraph::mainLoop()
         bool    findLargeLoop = false;
         // 检测新增的keyframe并检测其中的回环
         // 边
-    
+        cout<<"new key frames = "<<newFrames_copy.size()<<endl;
+        
+        for ( auto nf : newFrames_copy )
+        {
+            // 检测nf和keyframes末尾几个的关系
+            // 请注意 事实上neframes里的东西已经出现在keyframes里边
