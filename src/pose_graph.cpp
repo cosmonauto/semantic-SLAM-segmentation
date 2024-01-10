@@ -116,4 +116,9 @@ void PoseGraph::mainLoop()
                 {
                     break;
                 }
-          
+                RGBDFrame::Ptr pf = keyframes[idx];
+                //cout<<"checking "<<nf->id<<" and "<<pf->id<<endl;
+                //  检测边是否存在
+                if (isEdgeExist( nf->id, pf->id ))
+                {
+                 
