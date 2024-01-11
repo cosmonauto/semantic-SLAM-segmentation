@@ -128,4 +128,10 @@ void PoseGraph::mainLoop()
                 PNP_INFORMATION info;
                 if ( pnp->solvePnPLazy( pf, nf, info, false ) == false )
                 {
-                    
+                    continue;
+                }
+//viso
+		else
+		{
+			// 用viso2检测nf和pf之间是否可以计算一个边
+			QuadFeatureMatch* quadmatcher = new QuadFeatureMatch(nf->img_lc,nf->img_rc,pf->img_lc,pf->img_rc,nf->semantic_cur_r,pf->semantic_cur_r, tru
