@@ -121,4 +121,11 @@ void PoseGraph::mainLoop()
                 //  检测边是否存在
                 if (isEdgeExist( nf->id, pf->id ))
                 {
-                 
+                    continue;
+                }
+
+                // 用pnp检测nf和pf之间是否可以计算一个边
+                PNP_INFORMATION info;
+                if ( pnp->solvePnPLazy( pf, nf, info, false ) == false )
+                {
+                    
