@@ -148,4 +148,6 @@ void PoseGraph::mainLoop()
 					for (int32_t j=0; j<4; ++j)
 						M.val[i][j] = motion.at<double>(i,j);
 				Matrix_ pose = M;
-				Eigen::Isometry3d T = Ei
+				Eigen::Isometry3d T = Eigen::Isometry3d::Identity();
+				T(0,0) = pose.val[0][0]; T(0,1) = pose.val[0][1]; T(0,2) = pose.val[0][2]; T(0,3) = pose.val[0][3];
+				T(1,0) = pose.val[1][0]; T(1,1) = pose.val[1][1]; T(1,2) = pose.val[1][2]; T(1,3)
