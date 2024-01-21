@@ -161,4 +161,6 @@ void PoseGraph::mainLoop()
 
                 // pnp成功，将pnp结果加到graph中
                 cout<<"solve pnp ok, generating an edge"<<endl;
-              
+                g2o::EdgeSE3* edge = new g2o::EdgeSE3();
+                edge->vertices()[0] = dynamic_cast<g2o::VertexSE3*> (optimizer.vertex( nf->id ));
+                edge->vertices()[1] = dynamic_cast<g2o::VertexSE3*> (optimizer.vertex
