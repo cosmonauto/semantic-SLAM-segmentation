@@ -191,4 +191,7 @@ void PoseGraph::mainLoop()
                 {
 // viso
 			// 用viso2检测nf和pf之间是否可以计算一个边
-			QuadFeatureMatch* quadmat
+			QuadFeatureMatch* quadmatcher = new QuadFeatureMatch(nf->img_lc,nf->img_rc,pf->img_lc,pf->img_rc,nf->semantic_cur_r,pf->semantic_cur_r, true);
+			quadmatcher->init(DET_GFTT,DES_SIFT);
+			quadmatcher->detectFeature();
+			quadm
