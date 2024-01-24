@@ -179,4 +179,9 @@ void PoseGraph::mainLoop()
             }// end of for nearbyFrames
 
             // nf 的回环检测
-            lo
+            looper->add( nf );
+            vector<RGBDFrame::Ptr>  possibleLoops = looper->getPossibleLoops( nf );
+
+            for ( auto pf:possibleLoops )
+            {
+                if ( isEdgeExist( nf->id,
