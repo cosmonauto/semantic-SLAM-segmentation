@@ -184,4 +184,11 @@ void PoseGraph::mainLoop()
 
             for ( auto pf:possibleLoops )
             {
-                if ( isEdgeExist( nf->id,
+                if ( isEdgeExist( nf->id, pf->id ) ) //这条边已经存在
+                    continue;
+                PNP_INFORMATION info;
+                if ( pnp->solvePnPLazy( pf, nf, info, false) == true )
+                {
+// viso
+			// 用viso2检测nf和pf之间是否可以计算一个边
+			QuadFeatureMatch* quadmat
