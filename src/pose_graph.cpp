@@ -194,4 +194,11 @@ void PoseGraph::mainLoop()
 			QuadFeatureMatch* quadmatcher = new QuadFeatureMatch(nf->img_lc,nf->img_rc,pf->img_lc,pf->img_rc,nf->semantic_cur_r,pf->semantic_cur_r, true);
 			quadmatcher->init(DET_GFTT,DES_SIFT);
 			quadmatcher->detectFeature();
-			quadm
+			quadmatcher->circularMatching();
+			if (tracker->viso.Process(*quadmatcher) == true)
+			{
+				//get ego-motion matrix (6DOF)
+				cv::Mat motion;
+				motion = tracker->viso.getMotion();
+				Matrix_ M = Matrix_::eye(4);
+		
