@@ -226,4 +226,13 @@ void PoseGraph::mainLoop()
                     EdgeID id;
                     id[nf->id] = pf->id;
                     edges[ id ] = edge;
-              
+                    optimizer.addEdge( edge );
+
+                    edge->computeError();
+                    loopAccumulatedError += edge->chi2();
+                }
+            } // end of for possible loops
+        } // end of for new frames
+
+        // 处理优化
+       
