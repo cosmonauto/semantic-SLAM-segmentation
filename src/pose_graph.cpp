@@ -235,4 +235,11 @@ void PoseGraph::mainLoop()
         } // end of for new frames
 
         // 处理优化
-       
+        bool doOptimize = false;
+        if ( loopAccumulatedError > loopAccuError )
+        {
+            // 处理全局优化
+            for ( auto v:vertexIdx )
+            {
+                optimizer.vertex(v)->setFixed(false);
+   
