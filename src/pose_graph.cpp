@@ -252,4 +252,10 @@ void PoseGraph::mainLoop()
             // 重置keyframes和refFrame
             for ( auto kf : keyframes )
             {
-                g2o::VertexSE3*
+                g2o::VertexSE3* v = dynamic_cast<g2o::VertexSE3*> ( optimizer.vertex( kf->id ) );
+                if ( v )
+                {
+                    kf->setTransform( v->estimate() );
+                }
+            }
+       
