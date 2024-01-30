@@ -247,4 +247,9 @@ void PoseGraph::mainLoop()
             cout<<"global optimization"<<endl;
             optimizer.initializeOptimization();
             boost::timer timer;
-            optimizer.optimize(10)
+            optimizer.optimize(10);
+            cout << BOLDYELLOW << "Global optimization time [" << timer.elapsed()*1000.0 << "] " << "ms" << RESET << endl;
+            // 重置keyframes和refFrame
+            for ( auto kf : keyframes )
+            {
+                g2o::VertexSE3*
