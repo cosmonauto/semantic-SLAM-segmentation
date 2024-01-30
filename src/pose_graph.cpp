@@ -258,4 +258,12 @@ void PoseGraph::mainLoop()
                     kf->setTransform( v->estimate() );
                 }
             }
-       
+            localAccumulatedError = 0;
+            loopAccumulatedError  = 0;
+            doOptimize = true;
+        }
+        else if ( localAccumulatedError > localAccuError )
+        {
+            // 处理局部优化
+            for ( auto v:vertexIdx )
+  
