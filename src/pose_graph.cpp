@@ -266,4 +266,9 @@ void PoseGraph::mainLoop()
         {
             // 处理局部优化
             for ( auto v:vertexIdx )
-  
+            {
+                optimizer.vertex( v )->setFixed( true );
+            }
+            for ( int i=vertexIdx.size()-1; i>0 && i>vertexIdx.size()-6; i-- )
+            {
+                optimizer
