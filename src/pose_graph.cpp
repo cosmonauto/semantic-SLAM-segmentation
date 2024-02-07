@@ -291,4 +291,12 @@ void PoseGraph::mainLoop()
                 }
                 
             }
-            localAccumulat
+            localAccumulatedError = 0;
+            doOptimize = true;
+        } // end of if loop accu
+        
+        if ( doOptimize == true )
+        {
+            refFrame = keyframes.back();
+            tracker->adjust( refFrame );
+      
