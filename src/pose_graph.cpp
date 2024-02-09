@@ -299,4 +299,7 @@ void PoseGraph::mainLoop()
         {
             refFrame = keyframes.back();
             tracker->adjust( refFrame );
-      
+        }
+    }
+    cout<<"pose graph thread stops"<<endl;
+}
