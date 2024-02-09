@@ -397,3 +397,229 @@ void QuadFeatureMatch::detectFeature()
         detector->detect(img_rp,keypoint_rp);
 
         time_detector = ((double)cv::getTickCount() - time_detector)/cv::getTickFrequency()*1000;
+
+        KeyPoint2Point(keypoint_lc, point_lc);
+        KeyPoint2Point(keypoint_rc, point_rc);
+        KeyPoint2Point(keypoint_lp, point_lp);
+        KeyPoint2Point(keypoint_rp, point_rp);
+
+
+    }
+    else
+    {
+        double time_detector = (double)cv::getTickCount();
+
+        detector->detect(img_lc,keypoint_lc);
+        KeyPoint2Point(keypoint_lc, point_lc);
+
+        time_detector = ((double)cv::getTickCount() - time_detector)/cv::getTickFrequency()*1000;
+    }
+
+}
+
+
+void QuadFeatureMatch::filteringTracks(vector<Point2f>& point_lc, vector<Point2f>& point_rc,
+                    vector<Point2f>& point_lp, vector<Point2f>& point_rp,
+                     vector<Point2f>& point_lp_direct)
+{
+
+    if(point_lc.size()!=point_rc.size()
+       || point_lc.size()!=point_lp.size()
+       || point_rc.size()!=point_rp.size()
+       || point_rp.size()!=point_lp.size()
+       || point_lp.size()!=point_lp_direct.size())
+    {
+        cout<<"ERROR! The Size of Input are not equal!"<<endl;
+        return;
+    }
+
+    int minHeightDif =20;
+    int minHeightDif2 =30;
+    int minWidthDif =200;
+    int minDisparity = 3;
+    cv::Size region(1280,960);
+
+    int num_lc = point_lc.size();
+
+    for(int i = 0; i < num_lc; i++)
+    {
+        cv::Point2f pt_lc = point_lc[i];
+        cv::Point2f pt_rc = point_rc[i];
+        cv::Point2f pt_lp = point_lp[i];
+        cv::Point2f pt_rp = point_rp[i];
+        cv::Point2f pt_lp_predict = point_lp_direct[i];
+
+
+
+        int dif_height1 = cvRound(abs(pt_lc.y - pt_rc.y));
+        int dif_height2 = cvRound(abs(pt_lp.y - pt_rp.y));
+
+        int dif_height11 = cvRound(abs(pt_lc.y - pt_lp.y));
+        int dif_height22 = cvRound(abs(pt_rc.y - pt_rp.y));
+
+        int dif_width1 = cvRound(abs(pt_lc.x - pt_lp.x));
+        int dif_width2 = cvRound(abs(pt_rc.x - pt_rp.x));
+
+        int disparity1 = cvRound(abs(pt_lc.x - pt_rc.x));
+        int disparity2 = cvRound(abs(pt_lp.x - pt_rp.x));
+
+        int dif_x = cvRound(abs(pt_lp.x - pt_lp_predict.x ));
+        int dif_y = cvRound(abs(pt_lp.y - pt_lp_predict.y ));
+
+        if(     withinRegion(pt_lc,region)           //outliers
+               && withinRegion(pt_lp,region)
+               && withinRegion(pt_rc,region)
+               && withinRegion(pt_rp,region)
+               && dif_height1 < minHeightDif
+               && dif_height2 < minHeightDif
+               && dif_height11 < minHeightDif2
+                && dif_height22 < minHeightDif2
+                && dif_width1 < minWidthDif
+                && dif_width2 < minWidthDif
+                && disparity1 > minDisparity
+                && disparity2 > minDisparity
+                && dif_x < 1 && dif_y < 1
+           )
+        {
+            pmatch res;
+            res.u1c = pt_lc.x;
+            res.v1c = pt_lc.y;
+            res.u1p = pt_lp.x;
+            res.v1p = pt_lp.y;
+            res.u2c = pt_rc.x;
+            res.v2c = pt_rc.y;
+            res.u2p = pt_rp.x;
+            res.v2p = pt_rp.y;
+            res.i1c = res.i1p = res.i2c = res.i2p = i;
+
+		// semantic validation
+		int cy = res.v2c;
+		int cx = res.u2c;
+		int py = res.v2p;
+		int px = res.u2p;
+		//if ( img_s_rc.ptr<uchar>(cy)[3*cx+0] == img_s_rp.ptr<uchar>(py)[3*px+0] && img_s_rc.ptr<uchar>(cy)[3*cx+1] == img_s_rp.ptr<uchar>(py)[3*px+1] && img_s_rc.ptr<uchar>(cy)[3*cx+2] == img_s_rp.ptr<uchar>(py)[3*px+2] )
+		    quadmatches.push_back(res);
+        }
+    }
+}
+
+
+void QuadFeatureMatch::KeyPoint2Point(vector<KeyPoint>& keypoint, vector<Point2f>& pt)
+{
+    pt.clear();      cv::Mat ground_mask;
+
+    int num = keypoint.size();
+    for(int i = 0;i<num;i++)
+    {
+        pt.push_back(keypoint[i].pt);
+    }
+}
+
+
+bool QuadFeatureMatch::withinRegion(cv::Point2f& pt, cv::Size& region)
+{
+    if(pt.x<region.width && pt.x>0.0f && pt.y<region.height && pt.y>0.0f) return true;
+    else return false;
+}
+
+
+float QuadFeatureMatch::caldistance(const cv::Mat& vec1, const cv::Mat& vec2, bool descriptor_binary)
+{
+    CV_Assert(vec1.rows == 1 && vec2.rows == 1 && vec1.cols == vec2.cols && vec1.type()==vec2.type());
+
+    float d = 0.0f;
+
+    if(!descriptor_binary)// for sift and surf, L2_NORM
+    {
+        CV_Assert(vec1.type()==CV_32F);
+        d = (float) cv::norm(vec1,vec2,NORM_L2);
+
+    }
+    else
+    {
+        CV_Assert(vec1.type()==CV_8U);
+        d = (float) cv::norm(vec1,vec2,NORM_HAMMING);
+    }
+
+    return d;
+}
+
+
+
+void QuadFeatureMatch::circularMatching()
+ {
+    if(mode_track) // circular tracking feature points
+    {
+        vector<uchar> status_lrc,status_ll,status_rr,status_lrp;
+        vector<float> error_lrc, error_ll, error_rr, error_lrp;
+        int winsize = 11;
+        int maxlvl = 3;
+
+        vector<cv::Point2f> point_lp_direct;
+        vector<uchar> status_lcp_direct;
+        vector<float> error_lcp_direct;
+
+        cv::TermCriteria criteria(TermCriteria::COUNT + TermCriteria::EPS,200,0.01);
+
+        {
+          // double time_KLT = (double)cv::getTickCount();
+
+           cv::calcOpticalFlowPyrLK(img_lc, img_rc, point_lc, point_rc, status_lrc, error_lrc,
+                                    cv::Size(winsize, winsize), maxlvl,criteria,OPTFLOW_LK_GET_MIN_EIGENVALS,0.000001);
+
+           cv::calcOpticalFlowPyrLK(img_rc, img_rp, point_rc, point_rp, status_rr, error_rr,
+                                    cv::Size(winsize, winsize), maxlvl,criteria,OPTFLOW_LK_GET_MIN_EIGENVALS,0.000001);
+
+           cv::calcOpticalFlowPyrLK(img_rp, img_lp, point_rp, point_lp, status_lrp, error_lrp,
+                                    cv::Size(winsize, winsize), maxlvl,criteria,OPTFLOW_LK_GET_MIN_EIGENVALS,0.000001);
+
+           cv::calcOpticalFlowPyrLK(img_lc, img_lp, point_lc, point_lp_direct, status_lcp_direct, error_lcp_direct,
+                                    cv::Size(winsize, winsize), maxlvl,criteria,OPTFLOW_LK_GET_MIN_EIGENVALS,0.000001);
+
+          // time_KLT = ((double)cv::getTickCount() - time_KLT)/cv::getTickFrequency()*1000;
+        }
+
+       /*Filtering out inaccuracy tracked points*/
+       double time_filtering = (double)cv::getTickCount();
+
+       filteringTracks(point_lc,point_rc,point_lp,point_rp,point_lp_direct);
+
+       time_filtering = ((double)cv::getTickCount() - time_filtering)/cv::getTickFrequency()*1000;
+
+    }
+
+
+    else  //circular matching feature points
+    {
+        this->extractDescriptor();//计算左右四张图的关键点和描述子
+
+        vector<DMatch> matches_lcp, matches_lrc,matches_rcp,matches_rlp;
+        double time_quadmatch = (double)cv::getTickCount();
+
+        matching(keypoint_lc,descriptor_lc, keypoint_rc,descriptor_rc, 20, 2, matches_lrc);
+
+        matching(keypoint_rc,descriptor_rc, keypoint_rp,descriptor_rp, 20, 20,matches_rcp);
+
+        matching(keypoint_rp,descriptor_rp, keypoint_lp,descriptor_lp, 20, 2,matches_rlp);
+
+        time_quadmatch = ((double)cv::getTickCount() - time_quadmatch)/cv::getTickFrequency()*1000;
+//        cout<<"The Circular matching through 4 images costs "<<time_quadmatch<<"ms"<<endl;
+//        cout<<"the size of keypoints_lc is: "<<keypoint_lc.size()<<" The matches_lrc's size is: ' "<<matches_lrc.size()<<endl;
+//        cout<<"the size of keypoints_rc is: "<<keypoint_rc.size()<<" The matches_rcp's size is: ' "<<matches_rcp.size()<<endl;
+//        cout<<"the size of keypoints_rp is: "<<keypoint_rp.size()<<" The matches_lrp's size is: ' "<<matches_rlp.size()<<endl;
+
+        int min_disparity=3;
+        int max_delta_x = 2;
+
+        int num_lc = keypoint_lc.size();
+        quadmatches.clear();
+
+        for(int i = 0; i<num_lc; i++)
+        {
+            int id_lc,id_rc,id_rp,id_lp = 0;
+            //std::array<int,4> tmp;
+            id_lc = i;
+            id_rc = matches_lrc[i].trainIdx;
+            if(id_rc > 0)
+            {
+                id_rp = matches_rcp[id_rc].trainIdx;
