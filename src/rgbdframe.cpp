@@ -134,3 +134,133 @@ RGBDFrame::Ptr   FrameReader::next()
 //	resize(segnet, segnet, frame->rgb.size());
 //	cv::cvtColor(segnet, frame->raw_semantic, CV_BGR2GRAY);;
 //	cv::LUT(segnet, frame->color, segnet);
+//	frame->semantic = segnet.clone();
+		
+		frame->semantic = cv::imread(dataset_dir+"segnet_0/"+segnet_2[currentIndex+1]);
+        frame->result   = cv::imread(dataset_dir+"result_0/"+segnet_2[currentIndex+1]);
+        //这里符号少掉了导致路径错误报错：Signal: SIGSEGV (Segmentation fault)
+
+	// Semantic pre_r
+//	cv::resize(frame->rgb_pre_r, new_frame, cv::Size(480,360));
+//	std::vector<Prediction> predictions_pre_r = classifier.Classify(new_frame);
+//	cv::Mat segnet_pre_r(new_frame.size(), CV_8UC3, cv::Scalar(0,0,0));
+//	for (int i = 0; i < 360; ++i)
+//	{	
+//		uchar* segnet_ptr = segnet_pre_r.ptr<uchar>(i);
+//		for (int j = 0; j < 480; ++j)
+//		{
+//			segnet_ptr[j*3+0] = predictions_pre_r[i*480+j].second;
+//			segnet_ptr[j*3+1] = predictions_pre_r[i*480+j].second;
+//			segnet_ptr[j*3+2] = predictions_pre_r[i*480+j].second;
+//		}
+//	}
+//	resize(segnet_pre_r, segnet_pre_r, frame->rgb_pre_r.size());
+//	cv::LUT(segnet_pre_r, frame->color, segnet_pre_r);
+//	frame->semantic_pre_r = segnet_pre_r.clone();
+		
+		frame->semantic_pre_r =  cv::imread(dataset_dir+"segnet_1/"+segnet_3[currentIndex]);
+
+	// Semantic cur_r
+//	cv::resize(frame->rgb_cur_r, new_frame, cv::Size(480,360));
+//	std::vector<Prediction> predictions_cur_r = classifier.Classify(new_frame);
+//	cv::Mat segnet_cur_r(new_frame.size(), CV_8UC3, cv::Scalar(0,0,0));
+//	for (int i = 0; i < 360; ++i)
+//	{	
+//		uchar* segnet_ptr = segnet_cur_r.ptr<uchar>(i);
+//		for (int j = 0; j < 480; ++j)
+//		{
+//			segnet_ptr[j*3+0] = predictions_cur_r[i*480+j].second;
+//			segnet_ptr[j*3+1] = predictions_cur_r[i*480+j].second;
+//			segnet_ptr[j*3+2] = predictions_cur_r[i*480+j].second;
+//		}
+//	}
+//	resize(segnet_cur_r, segnet_cur_r, frame->rgb_cur_r.size());
+//	cv::LUT(segnet_cur_r, frame->color, segnet_cur_r);
+//	frame->semantic_cur_r = segnet_cur_r.clone();
+		
+		frame->semantic_cur_r =  cv::imread(dataset_dir+"segnet_1/"+segnet_3[currentIndex+1]);
+
+        if (frame->rgb.data == nullptr || frame->depth.data==nullptr)
+        {
+            // 数据不存在
+  	    cout << "No data found." << endl;
+            return nullptr;
+        }
+        frame->camera = this->camera;
+        currentIndex ++;
+        return frame;
+    }
+    default:
+        break;
+    }
+
+    return nullptr;
+}
+
+void FrameReader::init_tum( const ParameterReader& para )
+{
+    dataset_dir = parameterReader.getData<string>("data_source");
+    string  associate_file  =   dataset_dir+"/associate.txt";
+    ifstream    fin(associate_file.c_str());
+    if (!fin)
+    {
+        cerr<<"找不着assciate.txt啊！在tum数据集中这尼玛是必须的啊!"<<endl;
+        cerr<<"请用python assicate.py rgb.txt depth.txt > associate.txt生成一个associate文件，再来跑这个程序！"<<endl;
+        return;
+    }
+
+    while( !fin.eof() )
+    {
+        string rgbTime, rgbFile, depthTime, depthFile;
+        fin>>rgbTime>>rgbFile>>depthTime>>depthFile;
+        if ( !fin.good() )
+        {
+            break;
+        }
+        rgbFiles.push_back( rgbFile );
+        depthFiles.push_back( depthFile );
+    }
+
+    cout<<"一共找着了"<<rgbFiles.size()<<"个数据记录哦！"<<endl;
+    camera = parameterReader.getCamera();
+    start_index = parameterReader.getData<int>("start_index");
+    currentIndex = start_index;
+}
+
+void FrameReader::init_kitti( const ParameterReader& para )
+{
+    dataset_dir = parameterReader.getData<string>("data_source");
+    string rgb_dir = parameterReader.getData<string>("rgb_dir"); 
+    string index_dir = dataset_dir + rgb_dir;
+
+    //number of files(count)
+    char directory[256]; 
+    strcpy(directory, index_dir.c_str()); 
+    struct dirent *de;
+    DIR *dir = opendir(directory);
+    int count = 0;	
+    while ((de = readdir(dir))) ++count;
+    closedir(dir);
+
+    // linux 
+    count = count - 2;
+
+    char rgbFile[256];
+    char depthFile[256];
+	char segnetFile[256];
+    for (int i = 0; i < count; i++)
+    {
+	    sprintf(rgbFile, "%06d.png", i);
+	    sprintf(depthFile, "%06d.png", i);
+		sprintf(segnetFile,"%06d.png",i);
+        rgbFiles.push_back( rgbFile );
+        depthFiles.push_back( depthFile );
+		segnet_2.push_back(segnetFile);
+		segnet_3.push_back(segnetFile);
+    }
+
+    cout<<"一共找着了"<<rgbFiles.size()<<"个数据记录哦！"<<endl;
+    camera = parameterReader.getCamera();
+    start_index = parameterReader.getData<int>("start_index");
+    currentIndex = start_index;
+}
