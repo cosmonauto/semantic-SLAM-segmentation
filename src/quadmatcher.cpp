@@ -623,3 +623,85 @@ void QuadFeatureMatch::circularMatching()
             if(id_rc > 0)
             {
                 id_rp = matches_rcp[id_rc].trainIdx;
+
+               if(id_rp > 0)
+               {
+                   id_lp = matches_rlp[id_rp].trainIdx;
+
+                   if(id_lp > 0)
+                   {
+                       pmatch test;
+                       test.u1c = keypoint_lc[id_lc].pt.x;
+                       test.v1c = keypoint_lc[id_lc].pt.y;
+                       test.i1c = id_lc;
+
+                       test.u2c = keypoint_rc[id_rc].pt.x;
+                       test.v2c = keypoint_rc[id_rc].pt.y;
+                       test.i2c = id_rc;
+
+                       test.u2p = keypoint_rp[id_rp].pt.x;
+                       test.v2p = keypoint_rp[id_rp].pt.y;
+                       test.i2p = id_rp;
+
+                       test.u1p = keypoint_lp[id_lp].pt.x;
+                       test.v1p = keypoint_lp[id_lp].pt.y;
+                       test.i1p = id_lp;
+
+                       int delta_x;
+                       delta_x = std::abs(std::abs(test.u1c - test.u1p) - std::abs(test.u2c - test.u2p));
+                       int disparity = std::abs(test.u1c-test.u2c);
+                        if(delta_x < max_delta_x && disparity > min_disparity)
+                       {
+                           quadmatches.push_back(test);
+                       }
+                   }
+               }
+            }
+        }
+
+    }
+
+
+}
+
+
+
+
+//print usage parameters of feature detector and descriptor
+void QuadFeatureMatch::printParams( cv::Algorithm* algorithm )
+{
+    std::vector<std::string> parameters;
+    algorithm->getParams(parameters);
+
+    for (int i = 0; i < (int) parameters.size(); i++) {
+        std::string param = parameters[i];
+        int type = algorithm->paramType(param);
+        std::string helpText = algorithm->paramHelp(param);
+        std::string typeText;
+
+        switch (type) {
+        case cv::Param::BOOLEAN:
+            typeText = "bool";
+            break;
+        case cv::Param::INT:
+            typeText = "int";
+            break;
+        case cv::Param::REAL:
+            typeText = "real (double)";
+            break;
+        case cv::Param::STRING:
+            typeText = "string";
+            break;
+        case cv::Param::MAT:
+            typeText = "Mat";
+            break;
+        case cv::Param::ALGORITHM:
+            typeText = "Algorithm";
+            break;
+        case cv::Param::MAT_VECTOR:
+            typeText = "Mat vector";
+            break;
+        }
+        std::cout << "Parameter '" << param << "' type=" << typeText << " help=" << helpText << std::endl;
+    }
+}
