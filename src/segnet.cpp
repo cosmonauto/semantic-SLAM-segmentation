@@ -98,3 +98,71 @@ std::vector<float> Classifier::Predict(const cv::Mat& img)
 	Preprocess(img, &input_channels);
 
 	net_->ForwardPrefilled();
+
+	/* Copy the output layer to a std::vector */
+	Blob<float>* output_layer = net_->output_blobs()[0];
+	
+	const float* begin = output_layer->cpu_data();
+	const float* end = begin + output_layer->height() * output_layer->width() * output_layer->channels();
+
+	return std::vector<float>(begin, end);
+}
+
+/* Wrap the input layer of the network in separate cv::Mat objects
+ * (one per channel). This way we save one memcpy operation and we
+ * don't need to rely on cudaMemcpy2D. The last preprocessing
+ * operation will write the separate channels directly to the input
+ * layer. */
+void Classifier::WrapInputLayer(std::vector<cv::Mat>* input_channels) 
+{
+	Blob<float>* input_layer = net_->input_blobs()[0];
+
+	int width = input_layer->width();
+	int height = input_layer->height();
+	float* input_data = input_layer->mutable_cpu_data();
+	for (int i = 0; i < input_layer->channels(); ++i) 
+	{
+		cv::Mat channel(height, width, CV_32FC1, input_data);
+		input_channels->push_back(channel);
+		input_data += width * height;
+	}
+}
+
+void Classifier::Preprocess(const cv::Mat& img, std::vector<cv::Mat>* input_channels) 
+{
+	/* Convert the input image to the input image format of the network. */
+	cv::Mat sample;
+	if (img.channels() == 3 && num_channels_ == 1)
+		cv::cvtColor(img, sample, CV_BGR2GRAY);
+	else if (img.channels() == 4 && num_channels_ == 1)
+		cv::cvtColor(img, sample, CV_BGRA2GRAY);
+	else if (img.channels() == 4 && num_channels_ == 3)
+		cv::cvtColor(img, sample, CV_BGRA2BGR);
+	else if (img.channels() == 1 && num_channels_ == 3)
+		cv::cvtColor(img, sample, CV_GRAY2BGR);
+	else
+		sample = img;
+
+	cv::Mat sample_resized;
+	if (sample.size() != input_geometry_)
+		cv::resize(sample, sample_resized, input_geometry_);
+	else
+		sample_resized = sample;
+
+	cv::Mat sample_float;
+	if (num_channels_ == 3)
+		sample_resized.convertTo(sample_float, CV_32FC3);
+	else
+		sample_resized.convertTo(sample_float, CV_32FC1);
+
+	cv::Mat sample_normalized;
+	cv::subtract(sample_float, mean_, sample_normalized);
+
+	/* This operation will write the separate BGR planes directly to the
+	* input layer of the network because it is wrapped by the cv::Mat
+	* objects in input_channels. */
+	cv::split(sample_normalized, *input_channels);
+
+	CHECK(reinterpret_cast<float*>(input_channels->at(0).data) == net_->input_blobs()[0]->cpu_data())
+		<< "Input channels are not wrapping the input layer of the network.";
+}
