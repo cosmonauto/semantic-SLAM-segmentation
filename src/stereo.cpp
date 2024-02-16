@@ -127,3 +127,67 @@ void triangulate10D(const cv::Mat& img, const cv::Mat& disp, cv::Mat& xyz,
  */
 void correct3DPoints(cv::Mat& xyz, ROI3D& roi_, const double& pitch1, const double& pitch2)
 {
+
+  double cos_p1 = cos(pitch1);
+  double sin_p1 = sin(pitch1);
+
+  int cols = xyz.cols;
+  int rows = xyz.rows;
+    
+  for(int j = 0; j < rows; j++)
+  {
+
+      float* xyz_ptr = xyz.ptr<float>(j);
+      
+      for(int i = 0;i < cols; i++)
+      {
+        float xp = xyz_ptr[10*i];
+        float yp = xyz_ptr[10*i+1];
+        float zp = xyz_ptr[10*i+2];
+
+        int d = cvRound(xyz_ptr[10*i+5]);
+
+        if(d < 25 && d>0)
+        {
+            xyz_ptr[10*i] = xp;
+            xyz_ptr[10*i+1] = cos_p1 * yp + sin_p1 * zp;
+            xyz_ptr[10*i+2] = cos_p1 * zp - sin_p1 * yp;
+
+            if(xyz_ptr[10*i] > roi_.x_max || xyz_ptr[10*i+1] > roi_.y_max || xyz_ptr[10*i+2]>roi_.z_max) //outside the ROI
+            {
+                xyz_ptr[10*i+6] = 0;
+            }
+
+
+        }
+        else if(d >= 25 && d<100)
+        {
+            xyz_ptr[10*i] = xp;
+            xyz_ptr[10*i+1] = cos_p1 * yp + sin_p1 * zp;
+            xyz_ptr[10*i+2] = cos_p1 * zp - sin_p1 * yp;
+
+            if(xyz_ptr[10*i] > roi_.x_max || xyz_ptr[10*i+1] > roi_.y_max || xyz_ptr[10*i+2] > roi_.z_max) //outside the ROI
+            {
+                xyz_ptr[10*i+6] = 0;
+            }
+        }
+        else
+        {
+             xyz_ptr[10*i+6] = 0;
+        }
+
+      }
+    }
+
+}
+
+void setImageROI (cv::Mat& xyz, cv::Mat& roi_mask)
+{
+      vector<Mat> channels(8);
+      split(xyz, channels);
+      cv::Mat ch6;
+      ch6 = channels[6];
+
+      roi_mask.create(ch6.size(),CV_8UC1);
+      cv::convertScaleAbs(ch6,roi_mask);
+}
