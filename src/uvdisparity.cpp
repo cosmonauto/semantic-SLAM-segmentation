@@ -564,3 +564,220 @@ void UVDisparity::findAllMasks(const VisualOdometryStereo &vo, const Mat &img_L,
 
        if(utense > min_intense)
         {
+          cv::Point seed(u,dis);
+          cv::Rect ccomp;
+          cv::Scalar low;
+          cv::Scalar up(255-utense);
+         //make the low and up difference
+          if(0.5*utense > min_intense)
+          {
+            low = cv::Scalar(0.5*utense);
+          }
+          else
+          {
+            low = cv::Scalar(abs(utense - min_intense));
+          }
+          
+          cv::Mat mask1,mask2;
+          mask1.create(u_dis_.rows+2, u_dis_.cols+2,CV_8UC1);
+          mask1 = Scalar::all(0);
+          
+          int newMaskVal = 255;
+          Scalar newVal = Scalar( 120, 120, 120 );
+          int connectivity = 8;
+
+          int flags = connectivity + (newMaskVal << 8 ) +FLOODFILL_FIXED_RANGE + FLOODFILL_MASK_ONLY;
+          
+          int area = floodFill(u_dis_,mask1,seed,newVal,&ccomp,low,up,flags);
+          
+          mask2 = mask1( Range(1, mask1.rows-1 ), Range(1, mask1.cols-1) );
+          
+          if(area > min_area)
+          {
+            masks_.push_back(mask2);
+          }
+        }
+        
+    }
+  }
+
+  int numInlier =  vo.quadmatches_inlier.size();
+
+  //find all possible masks_
+  for(int i = 0; i< numInlier; i++)
+  {
+    int u = vo.quadmatches_inlier[i].u1c;
+    short d = vo.quadmatches_inlier[i].dis_c;
+
+    if(d > min_disparity_raw)
+    {
+       int dis = cvRound(d/16.0f);
+       cv::circle(ushow, cv::Point(u,dis),2,cv::Scalar(0,0,255),2,8,0);
+    }
+  }
+
+  //cv::imshow("udisparity",ushow);
+}
+
+
+//select the finally Confirmed detection results from 2 frame's candidates_
+void UVDisparity::confirmed()
+{
+  if(candidates_.size() == 0)
+  {
+    return;
+  }
+  else if(candidates_.size() == 1)
+  {
+    masks_confirmed_ = candidates_[0];
+  }
+  else if(candidates_.size() == 2)
+  {
+    vector<cv::Mat> cdt0 = candidates_[0];
+    vector<cv::Mat> cdt1 = candidates_[1];
+    cout<<"size of cdt0,cdt1: "<<cdt0.size()<<" "<<cdt1.size()<<endl;
+    
+    for(int i = 0; i < cdt1.size(); i++)
+    {
+      cv::Mat maski = cdt1[i];
+
+      for(int j = 0; j < cdt0.size(); j++)
+      {
+        cv::Mat maskj = cdt0[j];
+
+        int minRows = std::min(maski.rows, maskj.rows);
+        
+        if(minRows == maski.rows)
+        {
+          cv::Mat maskjj =  maskj( Range(0, minRows), Range(0, maskj.cols) );
+          
+          if(isOverlapped(maski,maskjj))
+         {
+           masks_confirmed_.push_back(maski);
+         }
+
+        }
+
+         if(minRows == maskj.rows)
+        {
+          cv::Mat maskii =  maski( Range(0, minRows), Range(0, maski.cols) );
+
+          if(isOverlapped(maskj,maskii))
+         {
+           masks_confirmed_.push_back(maski);
+         }
+
+        }   
+      }
+    }
+  }
+}
+
+
+
+/*
+  project the outliers in vo into the coordinates of udis
+ */
+void UVDisparity::verifyByInliers(const VisualOdometryStereo& vo, const cv::Mat& img_L)
+{
+  vector<cv::Mat>::iterator it = masks_.begin();
+  int i = 0;
+
+  for(; it!= masks_.end();)
+  {
+    cv::Mat mask = *it;     
+    int num = numInlierInMask(mask,vo,img_L);
+    
+    if(num<inlier_tolerance_)
+    {
+      it++;
+    }
+    else
+    {
+      it = masks_.erase(it);
+    }
+    i++;
+  }
+}
+
+//count the number of inliers in a mask
+int UVDisparity::numInlierInMask(const cv::Mat& mask, const VisualOdometryStereo& vo,const cv::Mat& img_L)
+{
+   cv::Mat img_show,mask_show;
+   cvtColor(img_L, img_show, CV_GRAY2BGR);
+   cvtColor(mask, mask_show, CV_GRAY2BGR);
+  
+  int numInlier =  vo.quadmatches_inlier.size();
+
+  int N = 0;
+  
+  for(int i = 0; i< numInlier; i++)
+  {
+    int u = vo.quadmatches_inlier[i].u1c;
+    //int v = vo.p_matched_inlier[i].v1c;
+    short d = vo.quadmatches_inlier[i].dis_c;
+    int dis = cvRound(d/16.0f);
+    
+    int utense = mask.at<uchar>(dis,u);
+    if(dis > 0 && utense!=0)
+    {
+      N++;
+    }
+  }
+
+   // cv::imshow("inliershow",mask_show);
+   // cv::waitKey(0);
+  return N;
+  
+}
+
+
+//judge if two masks_ are overlapped
+bool UVDisparity::isOverlapped(const cv::Mat& mask1, const cv::Mat& mask2)
+{
+  cv::Mat result_and;//, result_or;
+
+  bitwise_and(mask1,mask2,result_and);
+  
+  if(isAllZero(result_and))
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+ 
+}
+
+//judge if all the masks_ are separated
+bool UVDisparity::isMasksSeparate()
+{
+  int numMasks = masks_.size();
+  if(numMasks == 0) {return false;}
+  vector<cv::Mat>::iterator it1, it2;
+  
+  for(it1 = masks_.begin(); it1 != masks_.end(); it1++)
+  {
+    for(it2 = it1+1; it2 != masks_.end(); it2++)
+    {
+      cv::Mat mask1 = *it1;
+      cv::Mat mask2 = *it2;
+            
+      if(isOverlapped(mask1,mask2))
+      {
+        return false;
+      }
+    }
+  }
+
+  return true;
+  
+}
+
+
+
+//merge two overlapped masks_
+void UVDisparity::mergeMasks()
+{
+   vector<cv::Mat>::iterator it1, it2;
