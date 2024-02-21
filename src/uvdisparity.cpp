@@ -781,3 +781,209 @@ bool UVDisparity::isMasksSeparate()
 void UVDisparity::mergeMasks()
 {
    vector<cv::Mat>::iterator it1, it2;
+
+    for(it1 = masks_.begin(); it1 != masks_.end(); it1++)
+    {
+      for(it2 = it1+1; it2 != masks_.end(); )
+      {
+        cv::Mat mask1 = *it1;
+        cv::Mat mask2 = *it2;
+        cv::Mat mask_merge;
+        
+        if(isOverlapped(mask1,mask2))
+        {
+          bitwise_or(mask1,mask2,mask_merge);
+          *it1 = mask_merge;
+          it2 = masks_.erase(it2);
+        }
+        else
+        {
+          it2++;
+        }
+      }
+    }
+}
+
+//adjust udisparity intense by sigmoid function
+void UVDisparity::adjustUdisIntense(double scale, double range)
+{
+
+  for(int j = 0; j < u_dis_.rows; j++)
+  {   
+      uchar* u_ptr = u_dis_.ptr<uchar>(j);
+      int disparity = j;
+
+      double rate = sigmoid(disparity,scale,range,1);//0.02 -- 0.03之间比较好
+      //cout<<"the rate is: "<<rate<<endl;
+        
+      for(int i = 0; i < u_dis_.cols; i++)
+      {
+        int intense = u_ptr[i];
+        double intense_new = intense*1.0f * rate;
+        int intense_int = cvRound(intense_new);
+        
+          if(intense_int > 255)
+          {
+            u_ptr[i] = 255;
+          }
+          else
+          {
+            u_ptr[i] = intense_int;
+          }
+        }
+
+   }
+
+
+}
+
+
+
+//general processing function of UVDisparity based function
+cv::Mat UVDisparity::Process(cv::Mat& img_L, cv::Mat& disp_sgbm,
+                             VisualOdometryStereo& vo, cv::Mat& xyz,
+                             cv::Mat& roi_mask, cv::Mat& ground_mask,
+                             double& pitch1, double& pitch2)
+{
+    cv::Mat mask_moving;
+    calVDisparity(disp_sgbm,xyz);
+
+    //sequentially estimate pitch angles by Kalman Filter
+    vector<cv::Mat> pitch_measures;
+
+    pitch_measures = Pitch_Classify(xyz,ground_mask);
+    pitch1_KF->predict();
+    pitch1_KF->correct(pitch_measures[0]);
+
+    pitch2_KF->predict();
+    pitch2_KF->correct(pitch_measures[1]);
+
+    pitch1 = pitch_measures[0].at<float>(0);
+    pitch2 = pitch_measures[1].at<float>(0);
+
+
+    //Improve 3D reconstruction results by pitch angles
+    correct3DPoints(xyz,roi_,pitch1_KF->statePost.at<float>(0),pitch2_KF->statePost.at<float>(0));
+
+    //set image ROI according to ROI3D (ROI within a 3D space)
+    setImageROI(xyz, roi_mask);
+
+    //filter inliers and outliers
+    filterInOut(img_L,roi_mask,disp_sgbm,vo,pitch1);
+
+    //calculate Udisparity image
+    calUDisparity(disp_sgbm,xyz,roi_mask,ground_mask);
+
+    //using sigmoid function to adjust Udisparity image for segmentation
+    double scale = 0.02, range = 32;
+    adjustUdisIntense(scale,range);
+
+     //Find all possible segmentation
+     findAllMasks(vo,img_L,xyz,roi_mask);
+
+    if(masks_.size()>0)
+    {
+       //merge overlapped masks
+       mergeMasks();
+
+       //improve the segments by inliers
+       verifyByInliers(vo,img_L);
+     }
+
+   //perform segmentation in disparity image
+   segmentation(disp_sgbm,img_L,roi_mask,mask_moving);
+
+   //demonstration
+   cv::Mat img_show;
+   img_L.copyTo(img_show,mask_moving);
+   //cv::imshow("moving",img_show);
+   //cv::waitKey(1);
+
+   masks_.clear();
+   return mask_moving;
+}
+
+
+void UVDisparity::segmentation(const cv::Mat& disparity, const cv::Mat& img_L,
+                            cv::Mat& roi_mask, cv::Mat& mask_moving)
+{
+  cv::Mat img_show,img_show_last;
+  mask_moving = Mat::zeros(img_L.rows, img_L.cols, CV_8UC1);
+  cvtColor(img_L, img_show, CV_GRAY2BGR);
+
+  double eps = 1.5f;
+
+  int numMask = masks_.size();
+  if(numMask == 0)
+  {
+    //cout<<"DON'T FIND MOVING OBJECT"<<endl;
+    return;
+  }
+
+  cout<<"FIND MOVING OBJECT !!!"<<endl;
+  for(int m = 0; m < numMask; m++)
+  {
+
+    cv::Mat mask = masks_[m];
+
+    for(int i = 1; i < mask.rows; i++)
+    {
+      uchar* mask_ptr = mask.ptr<uchar>(i);
+
+      for(int j = 1; j < mask.cols; j++)
+      {
+        int intense = (int)mask_ptr[j];
+        //cout<<" "<<num_accu<<" ";
+
+        if( intense != 0 )
+        {
+
+          for(int k = 0; k < disparity.rows; k++)
+          {
+            short dis_raw = disparity.at<short>(k,j);
+            double dis_real = (dis_raw/16.0f);
+
+            if(abs(dis_real - i) < eps)
+            {
+              cv::Point pt(j,k);
+              if(isInMask(j,k,roi_mask))
+              {
+                mask_moving.at<uchar>(k,j)=255;
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+
+  }
+
+  img_show.copyTo(img_show_last,mask_moving);
+}
+
+
+//judge if a mat is all zero or not
+bool UVDisparity::isAllZero(const cv::Mat& mat)
+{
+   for(int i = 0;i<mat.rows;i++)
+    {
+      const uchar* mat_ptr = mat.ptr<uchar>(i);
+
+      for(int j = 0; j<mat.cols; j++)
+      {
+        int d = mat_ptr[j];
+        if(d!=0) return false;
+      }
+
+    }
+
+   return true;
+}
+
+bool UVDisparity::isInMask(int u, int v, const cv::Mat& roi_mask)
+{
+  if(roi_mask.at<uchar>(v,u) >0) return true;
+  else return false;
+}
