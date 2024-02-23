@@ -987,3 +987,18 @@ bool UVDisparity::isInMask(int u, int v, const cv::Mat& roi_mask)
   if(roi_mask.at<uchar>(v,u) >0) return true;
   else return false;
 }
+
+
+double UVDisparity::sigmoid(double t,double scale,double range, int mode = 1)
+{
+  double result;
+  if(mode == 1)
+  {
+    result = range*1.0f/(1+exp(t*scale));//flipped sigmoid function
+  }
+  else if(mode == 0)
+  {
+    result = range*1.0f/(1+exp(-1.0*t*scale));//standard sigmoid function
+  }
+  return result;
+}
