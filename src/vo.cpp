@@ -56,4 +56,11 @@ cv::Mat VisualOdometry::transformationVectorToMatrix (std::vector<double> tr) {
   double sx = sin(rx);
   double cx = cos(rx);
   double sy = sin(ry);
-  dou
+  double cy = cos(ry);
+  double sz = sin(rz);
+  double cz = cos(rz);
+
+  // compute transformation
+  cv::Mat Tr(4,4,CV_64FC1,cv::Scalar(0));
+
+  Tr.at<double>(0,0) = +cy*cz;Tr.at<double>(0,1) = -cy*sz; Tr.at<double>(0,2) = +sy;T
