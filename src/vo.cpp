@@ -63,4 +63,6 @@ cv::Mat VisualOdometry::transformationVectorToMatrix (std::vector<double> tr) {
   // compute transformation
   cv::Mat Tr(4,4,CV_64FC1,cv::Scalar(0));
 
-  Tr.at<double>(0,0) = +cy*cz;Tr.at<double>(0,1) = -cy*sz; Tr.at<double>(0,2) = +sy;T
+  Tr.at<double>(0,0) = +cy*cz;Tr.at<double>(0,1) = -cy*sz; Tr.at<double>(0,2) = +sy;Tr.at<double>(0,3) = tx;
+  Tr.at<double>(1,0) = +sx*sy*cz+cx*sz; Tr.at<double>(1,1) = -sx*sy*sz+cx*cz; Tr.at<double>(1,2) = -sx*cy; Tr.at<double>(1,3)= ty;
+  Tr.at<double>(2,0) = -cx*sy*cz+sx*sz; Tr.at<double>(2,1) = +cx*sy*sz+sx*cz; Tr.at<d
