@@ -31,4 +31,8 @@ bool VisualOdometry::updateMotion ()
   if (tr_delta.size()!=6)
     return false;
   
-  // se
+  // set transformation matrix (previous to current frame)
+  Tr_delta = transformationVectorToMatrix(tr_delta);
+
+  time = ((double)cv::getTickCount() - time)/cv::getTickFrequency()*1000;
+  //cout<<"The odometry estimat
