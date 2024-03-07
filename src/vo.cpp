@@ -35,4 +35,15 @@ bool VisualOdometry::updateMotion ()
   Tr_delta = transformationVectorToMatrix(tr_delta);
 
   time = ((double)cv::getTickCount() - time)/cv::getTickFrequency()*1000;
-  //cout<<"The odometry estimat
+  //cout<<"The odometry estimation costs "<<time<<" ms"<<endl;
+
+  // success
+  return true;
+}
+
+
+cv::Mat VisualOdometry::transformationVectorToMatrix (std::vector<double> tr) {
+
+  // extract parameters
+  double rx = tr[0];
+  double ry = tr[1];
