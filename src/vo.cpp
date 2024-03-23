@@ -65,4 +65,10 @@ cv::Mat VisualOdometry::transformationVectorToMatrix (std::vector<double> tr) {
 
   Tr.at<double>(0,0) = +cy*cz;Tr.at<double>(0,1) = -cy*sz; Tr.at<double>(0,2) = +sy;Tr.at<double>(0,3) = tx;
   Tr.at<double>(1,0) = +sx*sy*cz+cx*sz; Tr.at<double>(1,1) = -sx*sy*sz+cx*cz; Tr.at<double>(1,2) = -sx*cy; Tr.at<double>(1,3)= ty;
-  Tr.at<double>(2,0) = -cx*sy*cz+sx*sz; Tr.at<double>(2,1) = +cx*sy*sz+sx*cz; Tr.at<d
+  Tr.at<double>(2,0) = -cx*sy*cz+sx*sz; Tr.at<double>(2,1) = +cx*sy*sz+sx*cz; Tr.at<double>(2,2) = +cx*cy; Tr.at<double>(2,3) = tz;
+  Tr.at<double>(3,0) = 0;              Tr.at<double>(3,1) = 0;               Tr.at<double>(3,2) = 0;      Tr.at<double>(3,3) = 1;
+
+  return Tr;
+}
+
+vector<int> VisualOd
