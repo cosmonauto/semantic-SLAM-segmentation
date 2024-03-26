@@ -71,4 +71,12 @@ cv::Mat VisualOdometry::transformationVectorToMatrix (std::vector<double> tr) {
   return Tr;
 }
 
-vector<int> VisualOd
+vector<int> VisualOdometry::getRandomSample(int N,int num) {
+
+  // init sample and totalset
+  vector<int> sample;
+  vector<int> totalset;
+  
+  // create vector containing all indices
+  for (int i=0; i<N; i++)
+    t
