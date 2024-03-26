@@ -79,4 +79,11 @@ vector<int> VisualOdometry::getRandomSample(int N,int num) {
   
   // create vector containing all indices
   for (int i=0; i<N; i++)
-    t
+    totalset.push_back(i);
+
+  // add num indices to current sample
+  sample.clear();
+  for (int i=0; i<num; i++) {
+    int j = rand()%totalset.size();
+    sample.push_back(totalset[j]);
+    totalset.erase(totalset.begin()+j)
