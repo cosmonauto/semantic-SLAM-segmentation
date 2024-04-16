@@ -12,3 +12,6 @@ Some results
 ![result5][4]
 ![result6][5]
 
+[1]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/001.png
+[2]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/2.png
+[3]: https://github.com/cos
