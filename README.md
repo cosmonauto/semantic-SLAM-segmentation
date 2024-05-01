@@ -14,4 +14,6 @@ Some results
 
 [1]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/001.png
 [2]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/2.png
-[3]: https://github.com/cos
+[3]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/3.png
+[4]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/0002.png
+[5]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/0002.jpg
