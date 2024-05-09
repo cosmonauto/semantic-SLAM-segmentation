@@ -17,3 +17,12 @@ Some results
 [3]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/3.png
 [4]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/0002.png
 [5]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/0002.jpg
+[6]: https://github.com/cosmonauto/semantic-SLAM-segmentation/blob/master/000000.png
+
+Models
+====
+>- Model files are not included, you can choose to modify this file:
+
+```
+//segnet.cpp
+    std::strin
