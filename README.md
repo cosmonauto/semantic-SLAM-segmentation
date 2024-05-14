@@ -25,4 +25,10 @@ Models
 
 ```
 //segnet.cpp
-    std::strin
+    std::string model_file = "../models/segnet_model_driving_webdemo.prototxt";
+    std::string trained_file = "../models/segnet_weights_driving_webdemo.caffemodel";
+    std::string label_file = "../models/semantic12.txt";
+```
+
+
+> - [ ] The semantic segmentation method is
