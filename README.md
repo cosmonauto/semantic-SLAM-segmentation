@@ -44,4 +44,13 @@ Getting Started
 If you would like to try out this code , you should satisfy these requirements first.
 
 #OpenCV
-Used for image and feature manipulation. Download and install in
+Used for image and feature manipulation. Download and install instructions can be found at: http://opencv.org. Requires at least OpenCV 2.4.x.Note that this code is not compatible with OpenCV3.0
+
+Eigen 3.0+
+======
+
+PCL 1.7
+======
+
+DBoW2(for loop closure) and g2o(for solving pnp)
+=======
