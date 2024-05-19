@@ -31,4 +31,8 @@ Models
 ```
 
 
-> - [ ] The semantic segmentation method is
+> - [ ] The semantic segmentation method is based on [Alex Kendall's work ](https://github.com/cosmonauto/caffe-segnet) 
+
+>- [ ] Caffe Segnet is a modified version of **Caffe** which supports the **SegNet** architecture
+
+>- [ ] The mapping architecture is based on GaoXi
