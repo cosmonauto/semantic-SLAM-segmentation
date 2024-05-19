@@ -35,4 +35,13 @@ Models
 
 >- [ ] Caffe Segnet is a modified version of **Caffe** which supports the **SegNet** architecture
 
->- [ ] The mapping architecture is based on GaoXi
+>- [ ] The mapping architecture is based on GaoXiang's work and **ORB-SLAM**.
+
+
+----
+Getting Started
+=======
+If you would like to try out this code , you should satisfy these requirements first.
+
+#OpenCV
+Used for image and feature manipulation. Download and install in
